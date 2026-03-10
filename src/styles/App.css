@@ -1423,60 +1423,1074 @@ h4 { font-size: 1.25rem; }
   font-size: 0.85rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive Styles - Enhanced for all screen sizes */
+
+/* Tablet (481px - 1024px) */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 15px;
+  }
+  
   .dashboard-header .container {
-    flex-direction: column;
-    gap: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .dashboard-logo {
+    font-size: 1.3rem;
   }
   
   .dashboard-nav {
+    gap: 10px;
+  }
+  
+  .dashboard-nav a {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .user-info {
+    gap: 10px;
+  }
+  
+  .user-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+  
+  .stat-item {
+    font-size: 0.85rem;
+  }
+  
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 15px;
+  }
+  
+  .grade-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+  
+  .missions-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.3rem; }
+  
+  .page-title h1 {
+    font-size: 1.8rem;
+  }
+  
+  .auth-card {
+    padding: 30px;
+    max-width: 380px;
+  }
+  
+  .lesson-view {
+    max-width: 100%;
+  }
+  
+  .lesson-header,
+  .notes-section,
+  .quiz-header,
+  .quiz-question {
+    padding: 20px;
+  }
+  
+  .leaderboard-container {
+    max-width: 100%;
+  }
+  
+  .admin-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .admin-table {
+    font-size: 0.9rem;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 12px 15px;
+  }
+  
+  .level-progress {
+    padding: 20px;
+  }
+  
+  .badge-item {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .quiz-progress-bar {
+    width: 150px;
+  }
+  
+  .results-score {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .results-score .score {
+    font-size: 2.5rem;
+  }
+}
+
+/* Mobile Large (481px - 768px) */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 12px;
+  }
+  
+  /* Dashboard Header - Stack on mobile */
+  .dashboard-header {
+    padding: 10px 0;
+  }
+  
+  .dashboard-header .container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .dashboard-logo {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+  
+  .dashboard-nav {
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    gap: 8px;
+  }
+  
+  .dashboard-nav a {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .nav-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .user-stats {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .stat-item {
+    font-size: 0.8rem;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+  
+  .dashboard-content {
+    padding: 20px 0;
+  }
+  
+  .page-title {
+    margin-bottom: 20px;
+  }
+  
+  .page-title h1 {
+    font-size: 1.5rem;
+  }
+  
+  .page-title p {
+    font-size: 0.9rem;
+  }
+  
+  /* Cards */
+  .card {
+    padding: 16px;
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+  
+  .card-description {
+    font-size: 0.85rem;
+  }
+  
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  /* Grade Grid */
+  .grade-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .grade-card {
+    padding: 20px;
+  }
+  
+  .grade-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+  
+  .grade-card h3 {
+    font-size: 1rem;
+  }
+  
+  .grade-card p {
+    font-size: 0.8rem;
+  }
+  
+  /* Auth Pages */
+  .auth-page {
+    padding: 15px;
+  }
+  
+  .auth-card {
+    padding: 20px;
+    max-width: 100%;
+    border-radius: 16px;
+  }
+  
+  .auth-logo h1 {
+    font-size: 1.6rem;
+  }
+  
+  .auth-logo p {
+    font-size: 0.85rem;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    font-size: 0.9rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+  
+  .btn {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+  
+  /* Lesson List */
+  .lesson-list {
+    gap: 10px;
+  }
+  
+  .lesson-item {
+    padding: 12px 15px;
+    flex-wrap: wrap;
+  }
+  
+  .lesson-number {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+  
+  .lesson-info h4 {
+    font-size: 0.95rem;
+  }
+  
+  .lesson-info p {
+    font-size: 0.8rem;
+  }
+  
+  .lesson-status {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+  }
+  
+  /* Lesson View */
+  .lesson-view {
+    padding: 0 10px;
+  }
+  
+  .lesson-header {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  
+  .lesson-header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .lesson-header p {
+    font-size: 0.9rem;
+  }
+  
+  .notes-section {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  
+  .notes-content {
+    font-size: 0.95rem;
+  }
+  
+  .lesson-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .lesson-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* Quiz */
+  .quiz-container {
+    padding: 0 10px;
+  }
+  
+  .quiz-header {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  
+  .quiz-progress {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .quiz-progress-bar {
+    width: 120px;
+  }
+  
+  .quiz-question {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  
+  .quiz-question h3 {
+    font-size: 1.1rem;
+  }
+  
+  .quiz-option {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .quiz-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .quiz-actions .btn {
+    width: 100%;
+  }
+  
+  /* Quiz Results */
+  .quiz-results {
+    padding: 20px;
+    border-radius: 16px;
+  }
+  
+  .results-score {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .results-score .score {
+    font-size: 2rem;
+  }
+  
+  .results-score .label {
+    font-size: 0.8rem;
+  }
+  
+  .results-details p {
+    font-size: 1rem;
+  }
+  
+  .results-points {
+    font-size: 1.2rem;
+  }
+  
+  /* Leaderboard */
+  .leaderboard-container {
+    padding: 0 10px;
+  }
+  
+  .leaderboard-tabs {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .leaderboard-tab {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .leaderboard-list {
+    border-radius: 16px;
+  }
+  
+  .leaderboard-item {
+    padding: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .leaderboard-rank {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+  
+  .leaderboard-user h4 {
+    font-size: 0.95rem;
+  }
+  
+  .leaderboard-user span {
+    font-size: 0.8rem;
+  }
+  
+  .leaderboard-score {
+    font-size: 1rem;
+  }
+  
+  /* Level Progress */
+  .level-progress {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  
+  .level-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .level-badge {
+    font-size: 0.8rem;
+  }
+  
+  .level-progress-bar {
+    height: 10px;
+  }
+  
+  /* Badges */
+  .badges-container {
+    justify-content: center;
+  }
+  
+  .badge-item {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+  
+  /* Missions */
+  .missions-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .mission-card {
+    padding: 16px;
+  }
+  
+  .mission-title {
+    font-size: 0.95rem;
+  }
+  
+  .mission-description {
+    font-size: 0.8rem;
+  }
+  
+  /* Admin Dashboard */
+  .admin-header {
+    padding: 15px 0;
+  }
+  
+  .admin-header .container {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .admin-logo {
+    font-size: 1.3rem;
+  }
+  
+  .admin-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .admin-nav a {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .admin-content {
+    padding: 20px 0;
+  }
+  
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .admin-stat-card {
+    padding: 15px;
+  }
+  
+  .admin-stat-card h3 {
+    font-size: 0.8rem;
+  }
+  
+  .admin-stat-card .value {
+    font-size: 1.5rem;
+  }
+  
+  .admin-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .admin-table table {
+    min-width: 600px;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .admin-actions {
+    flex-wrap: wrap;
+  }
+  
+  /* Typography */
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.1rem; }
+  h4 { font-size: 1rem; }
+}
+
+/* Small Mobile (320px - 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+  
+  /* Dashboard Header */
+  .dashboard-logo {
+    font-size: 1.2rem;
+  }
+  
+  .dashboard-nav {
+    gap: 5px;
+  }
+  
+  .dashboard-nav a {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .user-info {
+    flex-direction: column;
+    gap: 8px;
   }
   
   .user-stats {
     display: none;
   }
   
-  .grade-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 0.75rem;
+  }
+  
+  .btn-sm {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  
+  /* Content */
+  .dashboard-content {
+    padding: 15px 0;
+  }
+  
+  .page-title h1 {
+    font-size: 1.3rem;
+  }
+  
+  .page-title p {
+    font-size: 0.85rem;
+  }
+  
+  /* Cards */
+  .card {
+    padding: 14px;
+    border-radius: 14px;
   }
   
   .card-grid {
-    grid-template-columns: 1fr;
+    gap: 10px;
   }
   
-  h1 { font-size: 1.8rem; }
-  h2 { font-size: 1.5rem; }
+  .card-title {
+    font-size: 1rem;
+  }
+  
+  .card-description {
+    font-size: 0.8rem;
+  }
+  
+  /* Grade Grid - Single column */
+  .grade-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .grade-card {
+    padding: 16px;
+  }
+  
+  .grade-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+  }
+  
+  .grade-card h3 {
+    font-size: 0.95rem;
+  }
+  
+  /* Auth */
+  .auth-page {
+    padding: 10px;
+  }
   
   .auth-card {
-    padding: 25px;
+    padding: 16px;
+    border-radius: 14px;
   }
   
-  .leaderboard-tabs {
-    flex-direction: column;
+  .auth-logo {
+    margin-bottom: 20px;
+  }
+  
+  .auth-logo h1 {
+    font-size: 1.4rem;
+  }
+  
+  .auth-logo p {
+    font-size: 0.8rem;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-group label {
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .btn {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+  }
+  
+  .error-message {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+  
+  /* Lesson List */
+  .lesson-list {
+    gap: 8px;
+  }
+  
+  .lesson-item {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  
+  .lesson-number {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+  
+  .lesson-info h4 {
+    font-size: 0.9rem;
+  }
+  
+  .lesson-info p {
+    font-size: 0.75rem;
+  }
+  
+  .lesson-status {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+  
+  /* Lesson View */
+  .lesson-header,
+  .notes-section {
+    padding: 14px;
+    border-radius: 14px;
+  }
+  
+  .lesson-header h1 {
+    font-size: 1.2rem;
+  }
+  
+  .notes-section h2 {
+    font-size: 1.1rem;
+  }
+  
+  .notes-content {
+    font-size: 0.9rem;
+  }
+  
+  /* Quiz */
+  .quiz-header,
+  .quiz-question {
+    padding: 14px;
+    border-radius: 14px;
+  }
+  
+  .quiz-progress-bar {
+    width: 100px;
+  }
+  
+  .quiz-question h3 {
+    font-size: 1rem;
+    margin-bottom: 18px;
+  }
+  
+  .quiz-option {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+  
+  .quiz-results {
+    padding: 16px;
+    border-radius: 14px;
+  }
+  
+  .results-score {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 18px;
+  }
+  
+  .results-score .score {
+    font-size: 1.6rem;
+  }
+  
+  .results-score .label {
+    font-size: 0.7rem;
+  }
+  
+  .results-details p {
+    font-size: 0.9rem;
+    margin: 8px 0;
+  }
+  
+  .results-points {
+    font-size: 1.1rem;
+    margin: 15px 0;
+  }
+  
+  /* Leaderboard */
+  .leaderboard-item {
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .leaderboard-rank {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+  
+  .leaderboard-user h4 {
+    font-size: 0.9rem;
+  }
+  
+  .leaderboard-user span {
+    font-size: 0.75rem;
+  }
+  
+  .leaderboard-score {
+    font-size: 0.95rem;
+  }
+  
+  /* Level Progress */
+  .level-progress {
+    padding: 14px;
+    border-radius: 14px;
+  }
+  
+  .level-header h3 {
+    font-size: 0.95rem;
+  }
+  
+  .level-badge {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
+  
+  .level-progress-bar {
+    height: 8px;
+  }
+  
+  /* Badges */
+  .badge-item {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .badge-icon {
+    font-size: 2rem;
+  }
+  
+  /* Missions */
+  .mission-card {
+    padding: 14px;
+  }
+  
+  .mission-title {
+    font-size: 0.9rem;
+  }
+  
+  .mission-description {
+    font-size: 0.75rem;
+  }
+  
+  .mission-points {
+    font-size: 0.8rem;
+  }
+  
+  /* Admin Dashboard */
+  .admin-logo {
+    font-size: 1.2rem;
+  }
+  
+  .admin-nav a {
+    padding: 6px 10px;
+    font-size: 0.8rem;
   }
   
   .admin-stats {
     grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
   
-  .admin-table {
-    overflow-x: auto;
+  .admin-stat-card {
+    padding: 12px;
+  }
+  
+  .admin-stat-card h3 {
+    font-size: 0.75rem;
+  }
+  
+  .admin-stat-card .value {
+    font-size: 1.3rem;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+  
+  /* Badge Notification */
+  .badge-notification {
+    padding: 18px;
+    border-radius: 14px;
+  }
+  
+  .badge-icon {
+    font-size: 2.5rem;
+  }
+  
+  .badge-notification h3 {
+    font-size: 1rem;
+  }
+  
+  /* Typography */
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.2rem; }
+  h3 { font-size: 1rem; }
+  h4 { font-size: 0.95rem; }
+  
+  /* Utility adjustments */
+  .mt-1 { margin-top: 0.4rem; }
+  .mt-2 { margin-top: 0.75rem; }
+  .mt-3 { margin-top: 1rem; }
+  .mt-4 { margin-top: 1.5rem; }
+  .mb-1 { margin-bottom: 0.4rem; }
+  .mb-2 { margin-bottom: 0.75rem; }
+  .mb-3 { margin-bottom: 1rem; }
+  .mb-4 { margin-bottom: 1.5rem; }
+  
+  .gap-1 { gap: 0.4rem; }
+  .gap-2 { gap: 0.75rem; }
+  .gap-3 { gap: 1rem; }
+  .gap-4 { gap: 1.5rem; }
+}
+
+/* Large Desktop (1441px and above) */
+@media (min-width: 1441px) {
+  .container {
+    max-width: 1400px;
+  }
+  
+  .dashboard-header .container {
+    max-width: 1400px;
+  }
+  
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+  
+  .grade-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  
+  .missions-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  
+  .lesson-view,
+  .quiz-container,
+  .leaderboard-container {
+    max-width: 1000px;
+  }
+  
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2.25rem; }
+  h3 { font-size: 1.75rem; }
+  
+  .page-title h1 {
+    font-size: 2.5rem;
   }
 }
 
-@media (max-width: 480px) {
-  .grade-grid {
-    grid-template-columns: 1fr;
+/* Prevent horizontal scroll on all devices */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure tap targets are large enough on mobile */
+@media (pointer: coarse) {
+  .btn,
+  .nav-link,
+  .quiz-option,
+  .lesson-item,
+  .leaderboard-item,
+  .admin-nav a {
+    min-height: 44px;
+    min-width: 44px;
   }
   
-  .lesson-actions {
-    flex-direction: column;
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .card-icon,
+  .badge-icon,
+  .grade-icon {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Print styles */
+@media print {
+  .dashboard-header,
+  .admin-header,
+  .btn,
+  .nav-link {
+    display: none !important;
   }
   
-  .btn {
-    width: 100%;
+  .dashboard,
+  .admin-dashboard {
+    background: white;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
+
+/* Dark mode support (future enhancement) */
+@media (prefers-color-scheme: dark) {
+  /* These can be enabled when dark mode is needed */
+}
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
