@@ -11,6 +11,8 @@ import LessonDetail from './pages/LessonDetail';
 import Quiz from './pages/Quiz';
 import Leaderboard from './pages/Leaderboard';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminAnalytics from './pages/AdminAnalytics';
+import AdminAnalytics from './pages/AdminAnalytics';
 import './styles/App.css';
 
 const PrivateRoute = ({ children, adminOnly = false }) => {
@@ -101,6 +103,11 @@ function App() {
           <Route path="/admin" element={
             <PrivateRoute adminOnly={true}>
               <AdminDashboard />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/analytics" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminAnalytics />
             </PrivateRoute>
           } />
           <Route path="/" element={<Navigate to="/login" />} />

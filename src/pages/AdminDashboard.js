@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -116,6 +117,13 @@ const Icons = {
       <line x1="12" y1="3" x2="12" y2="15"/>
     </svg>
   ),
+  Analytics: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <line x1="18" y1="20" x2="18" y2="10"/>
+      <line x1="12" y1="20" x2="12" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="14"/>
+    </svg>
+  ),
   Trophy: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
@@ -144,6 +152,7 @@ const AdminDashboard = () => {
   const [uploading, setUploading] = useState(false);
   const [activeTab, setActiveTab] = useState('overview'); // overview, content, students
   const [analytics, setAnalytics] = useState(null);
+  const [levelDistribution, setLevelDistribution] = useState([]);
   const [students, setStudents] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
   const navigate = useNavigate();
@@ -155,6 +164,7 @@ const AdminDashboard = () => {
     }
     fetchContent();
     fetchAnalytics();
+    fetchLevelDistribution();
   }, [user]);
 
   useEffect(() => {
@@ -162,29 +172,42 @@ const AdminDashboard = () => {
       fetchStudents();
     } else if (activeTab === 'overview') {
       fetchAnalytics();
+      fetchLevelDistribution();
     }
   }, [activeTab]);
 
-  const fetchAnalytics = async () => {
-    try {
-      const response = await fetch(`${API_URL}/analytics/overview`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await response.json();
-      setAnalytics(data);
-      
-      // Also fetch engagement data for top performers
-      const engagementRes = await fetch(`${API_URL}/analytics/engagement`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const engagementData = await engagementRes.json();
-      setLeaderboard(engagementData.topPerformers || []);
-    } catch (err) {
-      console.error('Failed to fetch analytics:', err);
-    }
-  };
+   const fetchAnalytics = async () => {
+     try {
+       const response = await fetch(`${API_URL}/analytics/overview`, {
+         headers: { Authorization: `Bearer ${token}` }
+       });
+       const data = await response.json();
+       setAnalytics(data);
+       
+       // Also fetch engagement data for top performers
+       const engagementRes = await fetch(`${API_URL}/analytics/engagement`, {
+         headers: { Authorization: `Bearer ${token}` }
+       });
+       const engagementData = await engagementRes.json();
+       setLeaderboard(engagementData.topPerformers || []);
+     } catch (err) {
+       console.error('Failed to fetch analytics:', err);
+     }
+   };
 
-  const fetchStudents = async () => {
+   const fetchLevelDistribution = async () => {
+     try {
+       const response = await fetch(`${API_URL}/analytics/level-distribution`, {
+         headers: { Authorization: `Bearer ${token}` }
+       });
+       const data = await response.json();
+       setLevelDistribution(data.distribution || []);
+     } catch (err) {
+       console.error('Failed to fetch level distribution:', err);
+     }
+   };
+
+   const fetchStudents = async () => {
     try {
       const response = await fetch(`${API_URL}/users?role=student`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -465,6 +488,26 @@ const AdminDashboard = () => {
           >
             <Icons.Users /> Students
           </button>
+          <a
+            href="/admin/analytics"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ 
+              padding: '12px 24px',
+              border: 'none',
+              background: '#10B981',
+              color: 'white',
+              borderRadius: '8px 8px 0 0',
+              cursor: 'pointer',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              textDecoration: 'none'
+            }}
+          >
+            <Icons.Analytics /> Full Analytics
+          </a>
         </div>
 
         {/* Overview Tab - Analytics & Leaderboard */}
@@ -540,6 +583,183 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Student Level Analytics Section */}
+            <div style={{ background: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', padding: '20px', marginTop: '30px' }}>
+              <h2 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span>📊</span> Student Level Distribution
+                <span style={{ fontSize: '0.875rem', fontWeight: 'normal', color: '#6B7280', marginLeft: 'auto' }}>
+                  Total: {analytics?.totalStudents || 0} students
+                </span>
+              </h2>
+
+              {/* Level Cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '15px', marginBottom: '30px' }}>
+                {levelDistribution.map((level, idx) => (
+                  <div key={idx} style={{
+                    background: idx === 0 ? '#F3F4F6' : 
+                               idx === 1 ? '#DBEAFE' : 
+                               idx === 2 ? '#F3E8FF' : 
+                               idx === 3 ? '#FCE7F3' : '#FEF3C7',
+                    padding: '20px',
+                    borderRadius: '12px',
+                    border: `2px solid ${idx === 0 ? '#6B7280' : 
+                                         idx === 1 ? '#3B82F6' : 
+                                         idx === 2 ? '#8B5CF6' : 
+                                         idx === 3 ? '#EC4899' : '#F59E0B'}`,
+                    textAlign: 'center'
+                  }}>
+                    <div style={{ fontSize: '2rem', marginBottom: '8px' }}>
+                      {idx === 0 ? '🌱' : idx === 1 ? '📚' : idx === 2 ? '🚀' : idx === 3 ? '⭐' : '👑'}
+                    </div>
+                    <h4 style={{ margin: '0 0 5px 0', color: '#1F2937' }}>{level.level}</h4>
+                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: idx === 0 ? '#6B7280' : idx === 1 ? '#3B82F6' : idx === 2 ? '#8B5CF6' : idx === 3 ? '#EC4899' : '#F59E0B' }}>
+                      {level.count}
+                    </div>
+                    <p style={{ margin: '5px 0 0 0', fontSize: '0.875rem', color: '#6B7280' }}>
+                      students
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Charts Row */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px' }}>
+                {/* Bar Chart */}
+                <div>
+                  <h4 style={{ color: '#1F2937', marginBottom: '15px' }}>Students by Level</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={levelDistribution}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="level" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="count" name="Students" fill="#4F46E5" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Pie Chart */}
+                <div>
+                  <h4 style={{ color: '#1F2937', marginBottom: '15px' }}>Level Distribution</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={levelDistribution}
+                        dataKey="count"
+                        nameKey="level"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        label={({ level, percent }) => `${level}: ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {levelDistribution.map((entry, index) => {
+                          const colors = ['#6B7280', '#3B82F6', '#8B5CF6', '#EC4899', '#FFD700'];
+                          return <circle key={index} fill={colors[index % colors.length]} />;
+                        })}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+
+            {/* Guide Students Section */}
+            <div style={{ background: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', padding: '20px', marginTop: '30px' }}>
+              <h2 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span>🎯</span> Quick Guidance Actions
+              </h2>
+              <p style={{ color: '#6B7280', marginBottom: '20px' }}>
+                Use these quick actions to help students who need attention:
+              </p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
+                <button 
+                  onClick={() => {
+                    // Navigate to students with filters
+                    setActiveTab('students');
+                  }}
+                  style={{
+                    padding: '15px',
+                    border: '2px solid #EF4444',
+                    borderRadius: '10px',
+                    background: '#FEF2F2',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <div style={{ fontSize: '1.5rem', marginBottom: '5px' }}>🔴</div>
+                  <strong style={{ color: '#EF4444', display: 'block', marginBottom: '5px' }}>
+                    Help Struggling Students
+                  </strong>
+                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>
+                    View students with low scores (< 50%) and send them encouragement
+                  </span>
+                </button>
+
+                <button 
+                  onClick={() => setActiveTab('students')}
+                  style={{
+                    padding: '15px',
+                    border: '2px solid #F59E0B',
+                    borderRadius: '10px',
+                    background: '#FFFBEB',
+                    cursor: 'pointer',
+                    textAlign: 'left'
+                  }}
+                >
+                  <div style={{ fontSize: '1.5rem', marginBottom: '5px' }}>🟡</div>
+                  <strong style={{ color: '#D97706', display: 'block', marginBottom: '5px' }}>
+                    Encourage Inactive Students
+                  </strong>
+                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>
+                    Students who haven't logged in for 3+ days - send them reminder
+                  </span>
+                </button>
+
+                <button 
+                  onClick={() => navigate('/admin/analytics')}
+                  style={{
+                    padding: '15px',
+                    border: '2px solid #10B981',
+                    borderRadius: '10px',
+                    background: '#ECFDF5',
+                    cursor: 'pointer',
+                    textAlign: 'left'
+                  }}
+                >
+                  <div style={{ fontSize: '1.5rem', marginBottom: '5px' }}>🟢</div>
+                  <strong style={{ color: '#059669', display: 'block', marginBottom: '5px' }}>
+                    View Full Analytics
+                  </strong>
+                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>
+                    Deep dive into charts, graphs, and performance trends
+                  </span>
+                </button>
+
+                <button 
+                  onClick={() => setActiveTab('students')}
+                  style={{
+                    padding: '15px',
+                    border: '2px solid #3B82F6',
+                    borderRadius: '10px',
+                    background: '#EFF6FF',
+                    cursor: 'pointer',
+                    textAlign: 'left'
+                  }}
+                >
+                  <div style={{ fontSize: '1.5rem', marginBottom: '5px' }}>🔵</div>
+                  <strong style={{ color: '#2563EB', display: 'block', marginBottom: '5px' }}>
+                    Challenge Top Performers
+                  </strong>
+                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>
+                    Identify high-achieving students and offer advanced content
+                  </span>
+                </button>
               </div>
             </div>
 
@@ -839,6 +1059,35 @@ const AdminDashboard = () => {
               </div>
             </div>
 
+            {/* Quick Filters */}
+            <div style={{ background: 'white', padding: '15px', borderRadius: '12px', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <strong style={{ color: '#6B7280' }}>Quick Filters:</strong>
+              <button 
+                onClick={() => {/* TODO: filter students */}}
+                style={{ padding: '8px 16px', border: '1px solid #E5E7EB', borderRadius: '8px', background: 'white', cursor: 'pointer' }}
+              >
+                🔴 Struggling (<50%)
+              </button>
+              <button 
+                onClick={() => {/* TODO: filter students */}}
+                style={{ padding: '8px 16px', border: '1px solid #F59E0B', borderRadius: '8px', background: '#FFFBEB', cursor: 'pointer' }}
+              >
+                🟡 Inactive (3+ days)
+              </button>
+              <button 
+                onClick={() => {/* TODO: filter students */}}
+                style={{ padding: '8px 16px', border: '1px solid #10B981', borderRadius: '8px', background: '#ECFDF5', cursor: 'pointer' }}
+              >
+                🟢 High Achievers
+              </button>
+              <button 
+                onClick={() => {/* TODO: clear filters */}}
+                style={{ padding: '8px 16px', border: '1px solid #6B7280', borderRadius: '8px', background: '#F9FAFB', cursor: 'pointer' }}
+              >
+                Show All
+              </button>
+            </div>
+
             <div style={{ background: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
@@ -851,45 +1100,84 @@ const AdminDashboard = () => {
                     <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Streak</th>
                     <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Lessons</th>
                     <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Badges</th>
-                    <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Joined</th>
+                    <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {students.map((student, index) => (
-                    <tr key={student._id} style={{ borderBottom: '1px solid #E5E7EB' }}>
-                      <td style={{ padding: '15px' }}>{index + 1}</td>
-                      <td style={{ padding: '15px', fontWeight: '600' }}>{student.username}</td>
-                      <td style={{ padding: '15px' }}>{student.grade?.displayName || 'Not assigned'}</td>
-                      <td style={{ padding: '15px' }}>
-                        <span style={{ 
-                          padding: '4px 12px', 
-                          borderRadius: '20px', 
-                          fontSize: '0.875rem',
-                          background: student.level === 'Master' ? '#FEF3C7' : 
-                                     student.level === 'Expert' ? '#F3E8FF' : 
-                                     student.level === 'Advanced' ? '#D1FAE5' : 
-                                     student.level === 'Learner' ? '#DBEAFE' : '#E5E7EB',
-                          color: student.level === 'Master' ? '#92400E' : 
-                                 student.level === 'Expert' ? '#7C3AED' : 
-                                 student.level === 'Advanced' ? '#059669' : 
-                                 student.level === 'Learner' ? '#2563EB' : '#6B7280'
-                        }}>
-                          {student.level}
-                        </span>
-                      </td>
-                      <td style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', color: '#4F46E5' }}>{student.points}</td>
-                      <td style={{ padding: '15px', textAlign: 'center' }}>
-                        <span style={{ color: student.streak?.current > 0 ? '#F97316' : '#6B7280' }}>
-                          🔥 {student.streak?.current || 0}
-                        </span>
-                      </td>
-                      <td style={{ padding: '15px', textAlign: 'center' }}>{student.completedLessons?.length || 0}</td>
-                      <td style={{ padding: '15px', textAlign: 'center' }}>{student.badges?.length || 0}</td>
-                      <td style={{ padding: '15px', textAlign: 'center', color: '#6B7280', fontSize: '0.875rem' }}>
-                        {new Date(student.createdAt).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))}
+                  {students.map((student, index) => {
+                    // Determine if student needs attention
+                    const needsHelp = student.points < 500 || (student.streak?.current < 3 && student.completedLessons?.length > 0);
+                    
+                    return (
+                      <tr key={student._id} style={{ 
+                        borderBottom: '1px solid #E5E7EB',
+                        background: needsHelp ? '#FEF2F2' : 'transparent'
+                      }}>
+                        <td style={{ padding: '15px' }}>{index + 1}</td>
+                        <td style={{ padding: '15px', fontWeight: '600' }}>{student.username}</td>
+                        <td style={{ padding: '15px' }}>{student.grade?.displayName || 'Not assigned'}</td>
+                        <td style={{ padding: '15px' }}>
+                          <span style={{ 
+                            padding: '4px 12px', 
+                            borderRadius: '20px', 
+                            fontSize: '0.875rem',
+                            background: student.level === 'Master' ? '#FEF3C7' : 
+                                      student.level === 'Expert' ? '#F3E8FF' : 
+                                      student.level === 'Advanced' ? '#D1FAE5' : 
+                                      student.level === 'Learner' ? '#DBEAFE' : '#E5E7EB',
+                            color: student.level === 'Master' ? '#92400E' : 
+                                  student.level === 'Expert' ? '#7C3AED' : 
+                                  student.level === 'Advanced' ? '#059669' : 
+                                  student.level === 'Learner' ? '#2563EB' : '#6B7280'
+                          }}>
+                            {student.level}
+                          </span>
+                        </td>
+                        <td style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', color: '#4F46E5' }}>{student.points}</td>
+                        <td style={{ padding: '15px', textAlign: 'center' }}>
+                          <span style={{ color: student.streak?.current > 0 ? '#F97316' : '#6B7280' }}>
+                            🔥 {student.streak?.current || 0}
+                          </span>
+                        </td>
+                        <td style={{ padding: '15px', textAlign: 'center' }}>{student.completedLessons?.length || 0}</td>
+                        <td style={{ padding: '15px', textAlign: 'center' }}>{student.badges?.length || 0}</td>
+                        <td style={{ padding: '15px', textAlign: 'center' }}>
+                          <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
+                            <button 
+                              onClick={() => {/* Send encouragement */}}
+                              title="Send Encouragement"
+                              style={{ 
+                                padding: '6px 12px', 
+                                border: 'none', 
+                                borderRadius: '6px', 
+                                background: '#ECFDF5',
+                                color: '#059669',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem'
+                              }}
+                            >
+                              💬 Encourage
+                            </button>
+                            <button 
+                              onClick={() => {/* View progress */}}
+                              title="View Progress"
+                              style={{ 
+                                padding: '6px 12px', 
+                                border: 'none', 
+                                borderRadius: '6px', 
+                                background: '#EFF6FF',
+                                color: '#2563EB',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem'
+                              }}
+                            >
+                              📊 Progress
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
               {students.length === 0 && (
