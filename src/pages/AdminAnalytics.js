@@ -38,33 +38,61 @@ const AdminAnalytics = () => {
 
   const fetchAnalytics = async () => {
     setLoading(true);
+    const authHeaders = { Authorization: `Bearer ${token}` };
     try {
       let endpoint = '';
       if (activeTab === 'overview') endpoint = `${API_URL}/analytics/overview`;
-      else if (activeTab === 'levels') endpoint = `${API_URL}/analytics/level-distribution`;
+      else if (activeTab === 'levels') {
+        const res = await fetch(`${API_URL}/analytics/level-distribution`, { headers: authHeaders });
+        const result = await res.json();
+        setLevelData(result);
+        setLoading(false);
+        return;
+      }
       else if (activeTab === 'performance') {
         await Promise.all([
-          fetch(`${API_URL}/analytics/top-students?limit=10`).then(r => r.json()).then(setTopStudents),
-          fetch(`${API_URL}/analytics/lowest-students?limit=10`).then(r => r.json()).then(setLowStudents),
-          fetch(`${API_URL}/analytics/top-streaks?limit=10`).then(r => r.json()).then(setStreakStudents)
+          fetch(`${API_URL}/analytics/top-students?limit=10`, { headers: authHeaders }).then(r => r.json()).then(setTopStudents),
+          fetch(`${API_URL}/analytics/lowest-students?limit=10`, { headers: authHeaders }).then(r => r.json()).then(setLowStudents),
+          fetch(`${API_URL}/analytics/top-streaks?limit=10`, { headers: authHeaders }).then(r => r.json()).then(setStreakStudents)
         ]);
         setLoading(false);
         return;
       }
-      else if (activeTab === 'activity') endpoint = `${API_URL}/analytics/daily-activity?days=30`;
-      else if (activeTab === 'quizzes') endpoint = `${API_URL}/analytics/quiz-completion`;
+      else if (activeTab === 'activity') {
+        const res = await fetch(`${API_URL}/analytics/daily-activity?days=30`, { headers: authHeaders });
+        const result = await res.json();
+        setActivityData(result);
+        setLoading(false);
+        return;
+      }
+      else if (activeTab === 'quizzes') {
+        const res = await fetch(`${API_URL}/analytics/quiz-completion`, { headers: authHeaders });
+        const quizResult = await res.json();
+        setQuizAnalytics(quizResult);
+        const performersRes = await fetch(`${API_URL}/analytics/top-quiz-performers?limit=10`, { headers: authHeaders });
+        const performers = await performersRes.json();
+        setQuizAnalytics(prev => ({ ...prev, topPerformers: performers }));
+        setLoading(false);
+        return;
+      }
       else if (activeTab === 'locations') {
         await Promise.all([
-          fetch(`${API_URL}/analytics/village-analytics`).then(r => r.json()).then(setVillages),
-          fetch(`${API_URL}/analytics/school-analytics`).then(r => r.json()).then(setSchools)
+          fetch(`${API_URL}/analytics/village-analytics`, { headers: authHeaders }).then(r => r.json()).then(setVillages),
+          fetch(`${API_URL}/analytics/school-analytics`, { headers: authHeaders }).then(r => r.json()).then(setSchools)
         ]);
         setLoading(false);
         return;
       }
-      else if (activeTab === 'attention') endpoint = `${API_URL}/analytics/attention-needed?threshold=3`;
+      else if (activeTab === 'attention') {
+        const res = await fetch(`${API_URL}/analytics/attention-needed?threshold=3`, { headers: authHeaders });
+        const result = await res.json();
+        setAttentionData(result);
+        setLoading(false);
+        return;
+      }
 
       if (endpoint) {
-        const res = await fetch(endpoint, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch(endpoint, { headers: authHeaders });
         const result = await res.json();
         setData(result);
       }
@@ -177,21 +205,7 @@ const OverviewTab = ({ data }) => (
 
 // ============ LEVEL ANALYTICS TAB ============
 const LevelsTab = ({ data }) => {
-  const levelStats = [
-    { level: 'Beginner', count: 0 },
-    { level: 'Learner', count: 0 },
-    { level: 'Advanced', count: 0 },
-    { level: 'Expert', count: 0 },
-    { level: 'Master', count: 0 }
-  ];
-
-  // Calculate distribution from data or query
-  const [distribution, setDistribution] = useState(levelStats);
-
-  useEffect(() => {
-    fetch(`${API_URL}/analytics/level-distribution`).then(r => r.json()).then(setDistribution);
-  }, []);
-
+  const distribution = data?.distribution || [];
   const COLORS = ['#6B7280', '#3B82F6', '#8B5CF6', '#EC4899', '#FFD700'];
 
   return (
@@ -313,11 +327,7 @@ const PerformanceTab = ({ data }) => {
 
 // ============ ACTIVITY TAB ============
 const ActivityTab = ({ data }) => {
-  const [dailyData, setDailyData] = useState([]);
-
-  useEffect(() => {
-    fetch(`${API_URL}/analytics/daily-activity?days=30`).then(r => r.json()).then(setDailyData);
-  }, []);
+  const dailyData = data || [];
 
   return (
     <div>
@@ -358,15 +368,8 @@ const ActivityTab = ({ data }) => {
 
 // ============ QUIZ ANALYTICS TAB ============
 const QuizAnalyticsTab = ({ data }) => {
-  const [quizData, setQuizData] = useState({});
-  const [topPerformers, setTopPerformers] = useState([]);
-
-  useEffect(() => {
-    Promise.all([
-      fetch(`${API_URL}/analytics/quiz-completion`).then(r => r.json()).then(setQuizData),
-      fetch(`${API_URL}/analytics/top-quiz-performers?limit=10`).then(r => r.json()).then(setTopPerformers)
-    ]);
-  }, []);
+  const quizData = data || {};
+  const topPerformers = data?.topPerformers || [];
 
   return (
     <div>
