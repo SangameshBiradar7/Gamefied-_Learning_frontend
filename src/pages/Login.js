@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -8,13 +8,25 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for success message from registration redirect
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const successMsg = params.get('success');
+    if (successMsg) {
+      setSuccess(decodeURIComponent(successMsg));
+    }
+  }, [location]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setLoading(true);
 
     try {
@@ -39,6 +51,7 @@ const Login = () => {
           <p>Learn, Play, Succeed!</p>
         </div>
 
+        {success && <div className="success-message">{success}</div>}
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>

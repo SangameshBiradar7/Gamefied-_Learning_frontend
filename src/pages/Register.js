@@ -7,6 +7,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -33,9 +35,13 @@ const Register = () => {
     setLoading(true);
 
     try {
-      // Register without grade - student can select grade later
+      // Register without grade - student will select grade later
       await register(username, password, null);
-      navigate('/grades');
+      setSuccess('Account created successfully! Please select your grade to continue.');
+      // Navigate to grade selection after short delay
+      setTimeout(() => {
+        navigate('/grades');
+      }, 1000);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -52,6 +58,7 @@ const Register = () => {
         </div>
 
         {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
