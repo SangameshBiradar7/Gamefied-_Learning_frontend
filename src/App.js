@@ -12,7 +12,6 @@ import Quiz from './pages/Quiz';
 import Leaderboard from './pages/Leaderboard';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminAnalytics from './pages/AdminAnalytics';
-import AdminAnalytics from './pages/AdminAnalytics';
 import './styles/App.css';
 
 const PrivateRoute = ({ children, adminOnly = false }) => {

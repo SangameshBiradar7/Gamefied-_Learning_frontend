@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { 
+  BarChart, Bar, PieChart, Pie, LineChart, Line, AreaChart, Area, 
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell,
+  ComposedChart
+} from 'recharts';
+import {
+  Users, Trophy, TrendingUp, TrendingDown, AlertTriangle, BookOpen, Star,
+  Flame, Activity, Target, Award, Calendar, Clock, GraduationCap, School,
+  CheckCircle, XCircle, Zap, Gift, Medal, Crown, Rocket, Lightbulb
+} from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -25,103 +34,12 @@ const Icons = {
       <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
     </svg>
   ),
-  Video: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <rect x="2" y="4" width="16" height="16" rx="2"/>
-      <path d="M22 8l-4 4 4 4V8z"/>
-    </svg>
-  ),
-  Notes: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-      <polyline points="14 2 14 8 20 8"/>
-      <line x1="16" y1="13" x2="8" y2="13"/>
-      <line x1="16" y1="17" x2="8" y2="17"/>
-      <polyline points="10 9 9 9 8 9"/>
-    </svg>
-  ),
-  Quiz: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <circle cx="12" cy="12" r="10"/>
-      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-      <line x1="12" y1="17" x2="12.01" y2="17"/>
-    </svg>
-  ),
-  Add: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <circle cx="12" cy="12" r="10"/>
-      <line x1="12" y1="8" x2="12" y2="16"/>
-      <line x1="8" y1="12" x2="16" y2="12"/>
-    </svg>
-  ),
-  Edit: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-    </svg>
-  ),
-  Delete: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <polyline points="3 6 5 6 21 6"/>
-      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-    </svg>
-  ),
-  Check: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <polyline points="20 6 9 17 4 12"/>
-    </svg>
-  ),
-  Close: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <line x1="18" y1="6" x2="6" y2="18"/>
-      <line x1="6" y1="6" x2="18" y2="18"/>
-    </svg>
-  ),
-  ChevronDown: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <polyline points="6 9 12 15 18 9"/>
-    </svg>
-  ),
-  ChevronRight: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <polyline points="9 18 15 12 9 6"/>
-    </svg>
-  ),
-  Dashboard: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <rect x="3" y="3" width="7" height="7"/>
-      <rect x="14" y="3" width="7" height="7"/>
-      <rect x="14" y="14" width="7" height="7"/>
-      <rect x="3" y="14" width="7" height="7"/>
-    </svg>
-  ),
   Users: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
       <circle cx="9" cy="7" r="4"/>
       <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
       <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-    </svg>
-  ),
-  Save: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-      <polyline points="17 21 17 13 7 13 7 21"/>
-      <polyline points="7 3 7 8 15 8"/>
-    </svg>
-  ),
-  Upload: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-      <polyline points="17 8 12 3 7 8"/>
-      <line x1="12" y1="3" x2="12" y2="15"/>
-    </svg>
-  ),
-  Analytics: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <line x1="18" y1="20" x2="18" y2="10"/>
-      <line x1="12" y1="20" x2="12" y2="4"/>
-      <line x1="6" y1="20" x2="6" y2="14"/>
     </svg>
   ),
   Trophy: () => (
@@ -133,28 +51,323 @@ const Icons = {
       <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
       <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
     </svg>
+  ),
+  Check: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  ),
+  Cross: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  ),
+  AlertTriangle: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+      <path d="M12 9v4"/>
+      <path d="M12 17h.01"/>
+    </svg>
+  ),
+  Flame: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.6-3.1.8 1.8 2.2 3.2 4 4z"/>
+    </svg>
+  ),
+  Zap: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+  ),
+  School: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+    </svg>
+  ),
+  BookOpen: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </svg>
+  ),
+  Home: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  ),
+  TrendingUp: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+      <polyline points="17 6 23 6 23 12"/>
+    </svg>
+  ),
+  TrendingDown: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+      <polyline points="17 18 23 18 23 12"/>
+    </svg>
+  ),
+  Calendar: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/>
+      <line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+  ),
+  Medal: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/>
+      <path d="M11 12 5.12 2.2"/>
+      <path d="m13 12 5.88-9.8"/>
+      <path d="M8 7h8"/>
+      <circle cx="12" cy="17" r="5"/>
+      <path d="M12 18v-2h-.5"/>
+    </svg>
+  ),
+  Crown: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M2 12h20"/>
+      <path d="M12 2l-2 5h4l-2 5"/>
+      <path d="M12 22V12"/>
+      <path d="m5 12-3 3 3 3"/>
+      <path d="m19 12-3-3-3 3"/>
+    </svg>
+  ),
+  Rocket: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+      <path d="M9 12l-1 1"/>
+      <path d="M15 9l1 1"/>
+    </svg>
+  ),
+  Lightbulb: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M15 14l.5-1.5L15 11"/>
+      <path d="M12 10c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z"/>
+      <path d="M9 5v.01"/>
+      <path d="M15 5v.01"/>
+      <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 1 0 2 0v-.74c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/>
+    </svg>
+  ),
+  Star: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+    </svg>
+  ),
+  BookOpen: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </svg>
+  ),
+  BarChart2: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <line x1="12" y1="20" x2="12" y2="10"/>
+      <line x1="18" y1="20" x2="18" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="16"/>
+    </svg>
+  ),
+  PieChart: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+      <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+    </svg>
+  ),
+  Activity: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>
+  ),
+  Target: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="10"/>
+      <circle cx="12" cy="12" r="6"/>
+      <circle cx="12" cy="12" r="2"/>
+    </svg>
+  ),
+  Award: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="8" r="6"/>
+      <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+    </svg>
+  ),
+  Save: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+      <polyline points="17 21 17 13 7 13 7 21"/>
+      <polyline points="7 3 7 8 15 8"/>
+    </svg>
+  ),
+  Dashboard: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="7" height="7"/>
+      <rect x="14" y="3" width="7" height="7"/>
+      <rect x="14" y="14" width="7" height="7"/>
+      <rect x="3" y="14" width="7" height="7"/>
+    </svg>
+  ),
+  ChevronDown: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  ),
+  ChevronRight: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
   )
+};
+
+// ============ DUMMY DATA FOR TESTING ============
+const DUMMY_DATA = {
+  // Student Level Distribution
+  levelDistribution: [
+    { level: 'Beginner', count: 120, color: '#6B7280', icon: '🌱' },
+    { level: 'Learner', count: 85, color: '#3B82F6', icon: '📚' },
+    { level: 'Advanced', count: 40, color: '#8B5CF6', icon: '🚀' },
+    { level: 'Expert', count: 15, color: '#EC4899', icon: '⭐' },
+    { level: 'Master', count: 5, color: '#FFD700', icon: '👑' }
+  ],
+
+  // Level trend over last 7 days
+  levelTrend: [
+    { date: 'Apr 12', Beginner: 110, Learner: 75, Advanced: 35, Expert: 12, Master: 3 },
+    { date: 'Apr 13', Beginner: 115, Learner: 78, Advanced: 37, Expert: 13, Master: 3 },
+    { date: 'Apr 14', Beginner: 118, Learner: 82, Advanced: 38, Expert: 14, Master: 4 },
+    { date: 'Apr 15', Beginner: 119, Learner: 83, Advanced: 39, Expert: 14, Master: 4 },
+    { date: 'Apr 16', Beginner: 120, Learner: 85, Advanced: 40, Expert: 15, Master: 5 },
+    { date: 'Apr 17', Beginner: 120, Learner: 85, Advanced: 40, Expert: 15, Master: 5 },
+    { date: 'Apr 18', Beginner: 120, Learner: 85, Advanced: 40, Expert: 15, Master: 5 }
+  ],
+
+  // Top performing students
+  topStudents: [
+    { rank: 1, name: 'Rahul Sharma', points: 980, level: 'Expert', grade: 'Grade 10', streak: 45, lessons: 85, avatar: 'R' },
+    { rank: 2, name: 'Priya Patel', points: 920, level: 'Advanced', grade: 'Grade 9', streak: 38, lessons: 72, avatar: 'P' },
+    { rank: 3, name: 'Arjun Singh', points: 870, level: 'Advanced', grade: 'Grade 10', streak: 42, lessons: 68, avatar: 'A' },
+    { rank: 4, name: 'Sneha Reddy', points: 850, level: 'Advanced', grade: 'Grade 9', streak: 35, lessons: 65, avatar: 'S' },
+    { rank: 5, name: 'Vikash Kumar', points: 780, level: 'Learner', grade: 'Grade 8', streak: 28, lessons: 58, avatar: 'V' },
+    { rank: 6, name: 'Kavya Menon', points: 760, level: 'Learner', grade: 'Grade 8', streak: 32, lessons: 55, avatar: 'K' },
+    { rank: 7, name: 'Neha Gupta', points: 720, level: 'Learner', grade: 'Grade 7', streak: 25, lessons: 52, avatar: 'N' },
+    { rank: 8, name: 'Rohit Das', points: 690, level: 'Beginner', grade: 'Grade 7', streak: 22, lessons: 48, avatar: 'R' },
+    { rank: 9, name: 'Aisha Khan', points: 650, level: 'Beginner', grade: 'Grade 6', streak: 18, lessons: 45, avatar: 'A' },
+    { rank: 10, name: 'Aditya Bose', points: 620, level: 'Beginner', grade: 'Grade 6', streak: 15, lessons: 42, avatar: 'A' }
+  ],
+
+  // Weak students needing attention
+  weakStudents: {
+    lowPerformers: [
+      { name: 'Raju Kumar', points: 45, avgScore: 32, quizzes: 3, issue: 'Very low quiz scores' },
+      { name: 'Babu Lal', points: 60, avgScore: 38, quizzes: 4, issue: 'Consistently failing' },
+      { name: 'Laxmi Devi', points: 75, avgScore: 41, quizzes: 5, issue: 'Poor performance' },
+      { name: 'Mohan Singh', points: 80, avgScore: 44, quizzes: 4, issue: 'Below average' },
+      { name: 'Sita Yadav', points: 90, avgScore: 46, quizzes: 6, issue: 'Struggling with basics' }
+    ],
+    inactive: [
+      { name: 'Rameshwar', daysInactive: 15, lastLogin: 'Apr 3', issue: 'No activity for 15 days' },
+      { name: 'Geeta Rani', daysInactive: 12, lastLogin: 'Apr 6', issue: 'Absent for 2 weeks' },
+      { name: 'Shyam Sundar', daysInactive: 10, lastLogin: 'Apr 8', issue: 'Inactive 10 days' },
+      { name: 'Kamla Bai', daysInactive: 9, lastLogin: 'Apr 9', issue: 'Not logged in recently' }
+    ],
+    losingStreak: [
+      { name: 'Pappu Singh', streak: 0, longest: 25, issue: 'Lost 25-day streak' },
+      { name: 'Munni Devi', streak: 1, longest: 18, issue: 'Streak broken after 18 days' },
+      { name: 'Chhotu Kumar', streak: 2, longest: 15, issue: 'Streak dropping' }
+    ],
+    failedQuizzes: [
+      { name: 'Bhola Nath', failed: 5, total: 5, issue: 'Failed all 5 quizzes' },
+      { name: 'Jhandu Lal', failed: 4, total: 6, issue: '67% failure rate' },
+      { name: 'Rinki Devi', failed: 3, total: 5, issue: 'Failed 60% quizzes' }
+    ]
+  },
+
+  // Grade-wise analytics
+  gradeAnalytics: [
+    { grade: 'Grade 6', students: 45, avgPoints: 320, avgStreak: 4.2, completionRate: 68 },
+    { grade: 'Grade 7', students: 52, avgPoints: 380, avgStreak: 5.1, completionRate: 72 },
+    { grade: 'Grade 8', students: 48, avgPoints: 450, avgStreak: 6.3, completionRate: 75 },
+    { grade: 'Grade 9', students: 43, avgPoints: 520, avgStreak: 7.8, completionRate: 82 },
+    { grade: 'Grade 10', students: 47, avgPoints: 610, avgStreak: 9.1, completionRate: 88 }
+  ],
+
+  // Subject-wise performance
+  subjectPerformance: [
+    { subject: 'Mathematics', avgScore: 78, completionRate: 85, students: 185 },
+    { subject: 'Science', avgScore: 82, completionRate: 88, students: 178 },
+    { subject: 'English', avgScore: 75, completionRate: 80, students: 172 },
+    { subject: 'History', avgScore: 72, completionRate: 76, students: 165 },
+    { subject: 'Geography', avgScore: 79, completionRate: 84, students: 180 }
+  ],
+
+  // Daily activity tracking (last 14 days)
+  dailyActivity: [
+    { date: 'Apr 5', active: 45, lessons: 120, quizzes: 85 },
+    { date: 'Apr 6', active: 52, lessons: 145, quizzes: 98 },
+    { date: 'Apr 7', active: 58, lessons: 168, quizzes: 112 },
+    { date: 'Apr 8', active: 62, lessons: 189, quizzes: 134 },
+    { date: 'Apr 9', active: 68, lessons: 210, quizzes: 156 },
+    { date: 'Apr 10', active: 71, lessons: 230, quizzes: 175 },
+    { date: 'Apr 11', active: 65, lessons: 195, quizzes: 142 },
+    { date: 'Apr 12', active: 59, lessons: 170, quizzes: 118 },
+    { date: 'Apr 13', active: 64, lessons: 185, quizzes: 130 },
+    { date: 'Apr 14', active: 72, lessons: 225, quizzes: 168 },
+    { date: 'Apr 15', active: 78, lessons: 255, quizzes: 195 },
+    { date: 'Apr 16', active: 82, lessons: 280, quizzes: 218 },
+    { date: 'Apr 17', active: 85, lessons: 305, quizzes: 240 },
+    { date: 'Apr 18', active: 88, lessons: 330, quizzes: 265 }
+  ],
+
+  // Weekly engagement summary
+  weeklyEngagement: [
+    { week: 'Week 1', newStudents: 23, active: 156, completions: 450 },
+    { week: 'Week 2', newStudents: 31, active: 189, completions: 580 },
+    { week: 'Week 3', newStudents: 28, active: 175, completions: 520 },
+    { week: 'Week 4', newStudents: 35, active: 210, completions: 680 }
+  ],
+
+  // School analytics
+  schoolAnalytics: [
+    { school: 'Govt High School', students: 58, avgPoints: 420, avgStreak: 5.8, topLevels: 12 },
+    { school: 'Kendriya Vidyalaya', students: 62, avgPoints: 510, avgStreak: 7.2, topLevels: 18 },
+    { school: 'Navodaya Vidyalaya', students: 45, avgPoints: 620, avgStreak: 9.5, topLevels: 22 },
+    { school: 'City Public School', students: 55, avgPoints: 480, avgStreak: 6.8, topLevels: 15 },
+    { school: 'DPS', students: 48, avgPoints: 550, avgStreak: 8.1, topLevels: 19 }
+  ],
+
+  // Village analytics
+  villageAnalytics: [
+    { village: 'Ram Nagar', students: 32, avgPoints: 380, avgStreak: 4.5 },
+    { village: 'Gandhi Nagar', students: 28, avgPoints: 420, avgStreak: 5.2 },
+    { village: 'Shivaji Nagar', students: 35, avgPoints: 350, avgStreak: 4.0 },
+    { village: 'Ambedkar Nagar', students: 25, avgPoints: 480, avgStreak: 6.8 },
+    { village: 'Subhash Nagar', students: 30, avgPoints: 410, avgStreak: 5.5 },
+    { village: 'Nehru Nagar', students: 22, avgPoints: 520, avgStreak: 7.2 },
+    { village: 'Patel Nagar', students: 27, avgPoints: 390, avgStreak: 4.8 },
+    { village: 'Indira Nagar', students: 33, avgPoints: 450, avgStreak: 6.1 }
+  ],
+
+  // Quick stats
+  overviewStats: {
+    totalStudents: 265,
+    activeToday: 88,
+    activeThisWeek: 210,
+    activeThisMonth: 245,
+    avgPoints: 450,
+    perfectStreaks: 23,
+    lessonsCompletedToday: 330,
+    quizzesTakenToday: 265,
+    newToday: 12
+  }
 };
 
 const AdminDashboard = () => {
   const { user, token, logout } = useAuth();
-  const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState('');
-  const [editItem, setEditItem] = useState(null);
-  const [selectedGrade, setSelectedGrade] = useState(null);
-  const [selectedSubject, setSelectedSubject] = useState(null);
-  const [expandedGrades, setExpandedGrades] = useState({});
-  const [expandedSubjects, setExpandedSubjects] = useState({});
-  const [formData, setFormData] = useState({});
-  const [videoFile, setVideoFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview'); // overview, content, students
-  const [analytics, setAnalytics] = useState(null);
-  const [levelDistribution, setLevelDistribution] = useState([]);
-  const [students, setStudents] = useState([]);
-  const [leaderboard, setLeaderboard] = useState([]);
+  const [activeTab, setActiveTab] = useState('overview');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -162,1369 +375,1163 @@ const AdminDashboard = () => {
       navigate('/login');
       return;
     }
-    fetchContent();
-    fetchAnalytics();
-    fetchLevelDistribution();
+    setLoading(false);
   }, [user]);
 
-  useEffect(() => {
-    if (activeTab === 'students') {
-      fetchStudents();
-    } else if (activeTab === 'overview') {
-      fetchAnalytics();
-      fetchLevelDistribution();
-    }
-  }, [activeTab]);
-
-   const fetchAnalytics = async () => {
-     try {
-       const response = await fetch(`${API_URL}/analytics/overview`, {
-         headers: { Authorization: `Bearer ${token}` }
-       });
-       const data = await response.json();
-       setAnalytics(data);
-       
-       // Also fetch engagement data for top performers
-       const engagementRes = await fetch(`${API_URL}/analytics/engagement`, {
-         headers: { Authorization: `Bearer ${token}` }
-       });
-       const engagementData = await engagementRes.json();
-       setLeaderboard(engagementData.topPerformers || []);
-     } catch (err) {
-       console.error('Failed to fetch analytics:', err);
-     }
-   };
-
-   const fetchLevelDistribution = async () => {
-     try {
-       const response = await fetch(`${API_URL}/analytics/level-distribution`, {
-         headers: { Authorization: `Bearer ${token}` }
-       });
-       const data = await response.json();
-       setLevelDistribution(data.distribution || []);
-     } catch (err) {
-       console.error('Failed to fetch level distribution:', err);
-     }
-   };
-
-   const fetchStudents = async () => {
-    try {
-      const response = await fetch(`${API_URL}/users?role=student`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await response.json();
-      setStudents(data);
-    } catch (err) {
-      console.error('Failed to fetch students:', err);
-    }
-  };
-
-  const fetchContent = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`${API_URL}/admin/content`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await response.json();
-      console.log('Content fetched:', data);
-      setContent(data);
-    } catch (err) {
-      console.error('Failed to fetch content:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (type, id) => {
-    if (!confirm(`Are you sure you want to delete this ${type}?`)) return;
-    
-    try {
-      await fetch(`${API_URL}/${type}/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      fetchContent();
-    } catch (err) {
-      console.error(`Failed to delete ${type}:`, err);
-    }
-  };
-
-  const openModal = (type, item = null, parentId = null) => {
-    setModalType(type);
-    setEditItem(item);
-    setVideoFile(null); // Reset video file when opening modal
-    
-    if (type === 'grade') {
-      setFormData(item || { name: '', displayName: '', description: '', order: 0 });
-    } else if (type === 'subject') {
-      setFormData(item || { name: '', displayName: '', description: '', icon: 'book', color: '#4F46E5', gradeId: parentId || '' });
-    } else if (type === 'lesson') {
-      setFormData(item || { 
-        title: '', 
-        description: '', 
-        subjectId: parentId || '', 
-        videoUrl: item?.videoUrl || '', 
-        youtubeUrl: item?.youtubeUrl || '',
-        notes: item?.notes || '', 
-        quiz: item?.quiz || [], 
-        pointsReward: item?.pointsReward || 50, 
-        quizPointsReward: item?.quizPointsReward || 100,
-        order: item?.order || 0,
-        existingVideoUrl: item?.videoUrl || '',
-        existingYoutubeUrl: item?.youtubeUrl || ''
-      });
-    }
-    
-    setShowModal(true);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validation for lesson
-    if (modalType === 'lesson' && !formData.subjectId) {
-      alert('Please select a subject');
-      return;
-    }
-    
-    try {
-      const endpoint = modalType === 'grade' ? 'grades' : 
-                      modalType === 'subject' ? 'subjects' : 'lessons';
-      
-      const method = editItem ? 'PUT' : 'POST';
-      const url = editItem ? `${API_URL}/${endpoint}/${editItem._id}` : `${API_URL}/${endpoint}`;
-      
-      console.log('Submitting:', { modalType, endpoint, url, formData, videoFile });
-      
-      // For lessons, always use FormData to handle video uploads and existing video
-      if (modalType === 'lesson') {
-        setUploading(true);
-        const formDataToSend = new FormData();
-        formDataToSend.append('title', formData.title);
-        formDataToSend.append('description', formData.description || '');
-        formDataToSend.append('subjectId', formData.subjectId || '');
-        formDataToSend.append('notes', formData.notes || '');
-        formDataToSend.append('videoUrl', formData.videoUrl || '');
-        formDataToSend.append('youtubeUrl', formData.youtubeUrl || '');
-        formDataToSend.append('existingVideoUrl', formData.existingVideoUrl || '');
-        formDataToSend.append('existingYoutubeUrl', formData.existingYoutubeUrl || '');
-        formDataToSend.append('quiz', JSON.stringify(formData.quiz || []));
-        formDataToSend.append('pointsReward', formData.pointsReward || 50);
-        formDataToSend.append('quizPointsReward', formData.quizPointsReward || 100);
-        formDataToSend.append('order', formData.order || 0);
-        
-        // Only append video if a new file is selected
-        if (videoFile) {
-          formDataToSend.append('video', videoFile);
-        }
-        
-        const response = await fetch(url, {
-          method,
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-          body: formDataToSend
-        });
-        
-        const data = await response.json();
-        console.log('Lesson save response:', response.status, data);
-        
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to save lesson');
-        }
-        
-        setUploading(false);
-      } else {
-        const response = await fetch(url, {
-          method,
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(formData)
-        });
-        
-        if (!response.ok) {
-          const data = await response.json();
-          throw new Error(data.error || 'Failed to save');
-        }
-      }
-      
-      setShowModal(false);
-      setVideoFile(null);
-      fetchContent();
-    } catch (err) {
-      console.error('Failed to save:', err);
-      setUploading(false);
-      alert('Failed to save: ' + err.message);
-    }
-  };
-
-  const toggleGrade = (gradeId) => {
-    setExpandedGrades(prev => ({ ...prev, [gradeId]: !prev[gradeId] }));
-  };
-
-  const toggleSubject = (subjectId) => {
-    setExpandedSubjects(prev => ({ ...prev, [subjectId]: !prev[subjectId] }));
-  };
-
-  const addQuizQuestion = () => {
-    setFormData({
-      ...formData,
-      quiz: [...formData.quiz, { 
-        question: '', 
-        type: 'multiple_choice', 
-        options: ['', '', '', ''], 
-        correctAnswer: '', 
-        points: 10 
-      }]
-    });
-  };
-
-  const updateQuizQuestion = (index, field, value) => {
-    const updatedQuiz = [...formData.quiz];
-    updatedQuiz[index][field] = value;
-    setFormData({ ...formData, quiz: updatedQuiz });
-  };
-
-  const updateQuizOption = (questionIndex, optionIndex, value) => {
-    const updatedQuiz = [...formData.quiz];
-    updatedQuiz[questionIndex].options[optionIndex] = value;
-    setFormData({ ...formData, quiz: updatedQuiz });
-  };
-
-  const removeQuizQuestion = (index) => {
-    const updatedQuiz = formData.quiz.filter((_, i) => i !== index);
-    setFormData({ ...formData, quiz: updatedQuiz });
-  };
-
-  const getSubjectIcon = (name) => {
-    const icons = {
-      mathematics: '🧮',
-      science: '🔬',
-      english: '📖',
-      social_studies: '🌍'
-    };
-    return icons[name] || '📚';
-  };
-
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
+  // Calculate derived stats
+  const totalStudents = DUMMY_DATA.overviewStats.totalStudents;
+  const levelTotal = DUMMY_DATA.levelDistribution.reduce((sum, l) => sum + l.count, 0);
 
   return (
-    <div className="admin-dashboard" style={{ minHeight: '100vh', background: '#F3F4F6' }}>
+    <div className="admin-dashboard">
       {/* Header */}
       <header style={{ background: '#1F2937', padding: '15px 0', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <div style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '45px', height: '45px', background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Icons.Grade />
             </div>
-            <h1 style={{ color: 'white', fontSize: '1.5rem', margin: 0 }}>LearnQuest Admin</h1>
+            <div>
+              <h1 style={{ color: 'white', fontSize: '1.5rem', margin: 0, fontWeight: '800' }}>LearnQuest Admin</h1>
+              <p style={{ color: '#9CA3AF', margin: 0, fontSize: '0.875rem' }}>Analytics Dashboard</p>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <Link to="/dashboard" style={{ color: '#9CA3AF', textDecoration: 'none', padding: '8px 16px', borderRadius: '8px', background: 'rgba(255,255,255,0.1)' }}>
-              Student View
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <Link 
+              to="/dashboard" 
+              style={{ 
+                color: '#D1D5DB', 
+                textDecoration: 'none', 
+                padding: '10px 20px', 
+                borderRadius: '8px',
+                background: 'rgba(255,255,255,0.05)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s',
+                fontWeight: '600'
+              }}
+              onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+            >
+              <Icons.Home /> Student View
             </Link>
-            <button onClick={logout} style={{ background: '#EF4444', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>
+            <button 
+              onClick={logout} 
+              style={{ 
+                background: 'linear-gradient(135deg, #EF4444, #DC2626)', 
+                color: 'white', 
+                border: 'none', 
+                padding: '10px 24px', 
+                borderRadius: '8px', 
+                cursor: 'pointer',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+            >
               Logout
             </button>
+            <div style={{ 
+              width: '42px', 
+              height: '42px', 
+              borderRadius: '50%', 
+              background: 'linear-gradient(135deg, #667eea, #764ba2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontWeight: '700',
+              fontSize: '1.1rem'
+            }}>
+              {user?.username?.charAt(0).toUpperCase()}
+            </div>
           </div>
         </div>
       </header>
 
       <main className="container" style={{ padding: '30px 20px' }}>
-        {/* Tabs Navigation */}
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '30px', borderBottom: '2px solid #E5E7EB', paddingBottom: '10px' }}>
-          <button 
-            onClick={() => setActiveTab('overview')}
-            style={{ 
-              padding: '12px 24px', 
-              border: 'none', 
-              background: activeTab === 'overview' ? '#4F46E5' : 'transparent',
-              color: activeTab === 'overview' ? 'white' : '#6B7280',
-              borderRadius: '8px 8px 0 0',
-              cursor: 'pointer',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            <Icons.Dashboard /> Overview
-          </button>
-          <button 
-            onClick={() => setActiveTab('content')}
-            style={{ 
-              padding: '12px 24px', 
-              border: 'none', 
-              background: activeTab === 'content' ? '#4F46E5' : 'transparent',
-              color: activeTab === 'content' ? 'white' : '#6B7280',
-              borderRadius: '8px 8px 0 0',
-              cursor: 'pointer',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            <Icons.Grade /> Content
-          </button>
-          <button 
-            onClick={() => setActiveTab('students')}
-            style={{ 
-              padding: '12px 24px', 
-              border: 'none', 
-              background: activeTab === 'students' ? '#4F46E5' : 'transparent',
-              color: activeTab === 'students' ? 'white' : '#6B7280',
-              borderRadius: '8px 8px 0 0',
-              cursor: 'pointer',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            <Icons.Users /> Students
-          </button>
-          <a
-            href="/admin/analytics"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ 
-              padding: '12px 24px',
-              border: 'none',
-              background: '#10B981',
-              color: 'white',
-              borderRadius: '8px 8px 0 0',
-              cursor: 'pointer',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              textDecoration: 'none'
-            }}
-          >
-            <Icons.Analytics /> Full Analytics
-          </a>
+        {/* Dashboard Header */}
+        <div style={{ marginBottom: '30px' }}>
+          <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937', marginBottom: '8px' }}>
+            📊 Analytics Overview
+          </h1>
+          <p style={{ color: '#6B7280', fontSize: '1.1rem' }}>
+            Complete student performance monitoring and insights
+          </p>
         </div>
 
-        {/* Overview Tab - Analytics & Leaderboard */}
-        {activeTab === 'overview' && (
-          <div>
-            {/* Analytics Stats */}
-            <div style={{ marginBottom: '30px' }}>
-              <h2 style={{ color: '#1F2937', marginBottom: '20px' }}>Analytics Overview</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
-                <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '40px', height: '40px', background: '#EEF2FF', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icons.Users />
-                    </div>
-                    <div>
-                      <p style={{ color: '#6B7280', margin: 0, fontSize: '0.875rem' }}>Total Students</p>
-                      <h3 style={{ margin: 0, fontSize: '1.5rem' }}>{analytics?.totalStudents || 0}</h3>
-                    </div>
-                  </div>
+        {/* ============ 1. STUDENT LEVEL ANALYTICS ============ */}
+        <section style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #667eea, #764ba2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white'
+            }}>
+              <Icons.TrendingUp />
+            </div>
+            <div>
+              <h2 style={{ color: '#1F2937', margin: 0, fontSize: '1.5rem' }}>Student Level Analytics</h2>
+              <p style={{ color: '#6B7280', margin: 0, fontSize: '0.9rem' }}>
+                Distribution across all learning levels • Total: <strong>{levelTotal}</strong> students
+              </p>
+            </div>
+          </div>
+
+          {/* Level Cards */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
+            gap: '15px',
+            marginBottom: '30px'
+          }}>
+            {DUMMY_DATA.levelDistribution.map((level, idx) => (
+              <div 
+                key={level.level}
+                style={{
+                  background: 'white',
+                  padding: '24px',
+                  borderRadius: '16px',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                  border: `2px solid ${level.color}`,
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  transform: 'translateY(0)'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.12)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.08)'; }}
+              >
+                <div style={{ fontSize: '2.5rem', marginBottom: '10px', color: level.color }}>
+                  {level.icon}
                 </div>
-                <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '40px', height: '40px', background: '#ECFDF5', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icons.Check />
-                    </div>
-                    <div>
-                      <p style={{ color: '#6B7280', margin: 0, fontSize: '0.875rem' }}>Active (7 days)</p>
-                      <h3 style={{ margin: 0, fontSize: '1.5rem' }}>{analytics?.activeStudents || 0}</h3>
-                    </div>
-                  </div>
+                <h3 style={{ 
+                  margin: '0 0 8px 0', 
+                  color: '#1F2937', 
+                  fontSize: '1.1rem',
+                  fontWeight: '700'
+                }}>
+                  {level.level}
+                </h3>
+                <div style={{ 
+                  fontSize: '2.5rem', 
+                  fontWeight: '800',
+                  color: level.color,
+                  marginBottom: '5px'
+                }}>
+                  {level.count}
                 </div>
-                <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '40px', height: '40px', background: '#FEF3C7', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icons.Grade />
-                    </div>
-                    <div>
-                      <p style={{ color: '#6B7280', margin: 0, fontSize: '0.875rem' }}>Total Grades</p>
-                      <h3 style={{ margin: 0, fontSize: '1.5rem' }}>{analytics?.totalGrades || 0}</h3>
-                    </div>
-                  </div>
-                </div>
-                <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '40px', height: '40px', background: '#FCE7F3', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icons.Subject />
-                    </div>
-                    <div>
-                      <p style={{ color: '#6B7280', margin: 0, fontSize: '0.875rem' }}>Total Subjects</p>
-                      <h3 style={{ margin: 0, fontSize: '1.5rem' }}>{analytics?.totalSubjects || 0}</h3>
-                    </div>
-                  </div>
-                </div>
-                <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '40px', height: '40px', background: '#FED7AA', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icons.Lesson />
-                    </div>
-                    <div>
-                      <p style={{ color: '#6B7280', margin: 0, fontSize: '0.875rem' }}>Total Lessons</p>
-                      <h3 style={{ margin: 0, fontSize: '1.5rem' }}>{analytics?.totalLessons || 0}</h3>
-                    </div>
-                  </div>
-                </div>
-                <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '40px', height: '40px', background: '#DBEAFE', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ fontSize: '1.25rem' }}>⭐</span>
-                    </div>
-                    <div>
-                      <p style={{ color: '#6B7280', margin: 0, fontSize: '0.875rem' }}>Avg Points</p>
-                      <h3 style={{ margin: 0, fontSize: '1.5rem' }}>{Math.round(analytics?.averagePoints || 0)}</h3>
-                    </div>
-                  </div>
-                </div>
+                <p style={{ margin: 0, color: '#6B7280', fontSize: '0.9rem' }}>
+                  students ({Math.round((level.count/levelTotal)*100)}%)
+                </p>
               </div>
+            ))}
+          </div>
+
+          {/* Charts Grid */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
+            gap: '25px' 
+          }}>
+            {/* Bar Chart */}
+            <div style={{ 
+              background: 'white', 
+              borderRadius: '16px', 
+              padding: '25px',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.08)'
+            }}>
+              <h3 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Icons.BarChart2 /> Student Distribution by Level
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={DUMMY_DATA.levelDistribution}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                  <XAxis dataKey="level" stroke="#6B7280" fontSize={12} />
+                  <YAxis stroke="#6B7280" fontSize={12} />
+                  <Tooltip 
+                    contentStyle={{
+                      background: 'white',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                  <Legend />
+                  <Bar 
+                    dataKey="count" 
+                    name="Students" 
+                    fill="#4F46E5" 
+                    radius={[12, 12, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
 
-            {/* Student Level Analytics Section */}
-            <div style={{ background: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', padding: '20px', marginTop: '30px' }}>
-              <h2 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span>📊</span> Student Level Distribution
-                <span style={{ fontSize: '0.875rem', fontWeight: 'normal', color: '#6B7280', marginLeft: 'auto' }}>
-                  Total: {analytics?.totalStudents || 0} students
-                </span>
-              </h2>
+            {/* Pie Chart */}
+            <div style={{ 
+              background: 'white', 
+              borderRadius: '16px', 
+              padding: '25px',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.08)'
+            }}>
+              <h3 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Icons.PieChart /> Level Distribution Breakdown
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={DUMMY_DATA.levelDistribution}
+                    dataKey="count"
+                    nameKey="level"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    innerRadius={60}
+                    paddingAngle={3}
+                    label={({ level, percent }) => `${level}: ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {DUMMY_DATA.levelDistribution.map((entry, index) => (
+                      <Cell key={index} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{
+                      background: 'white',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
 
-              {/* Level Cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '15px', marginBottom: '30px' }}>
-                {levelDistribution.map((level, idx) => (
-                  <div key={idx} style={{
-                    background: idx === 0 ? '#F3F4F6' : 
-                               idx === 1 ? '#DBEAFE' : 
-                               idx === 2 ? '#F3E8FF' : 
-                               idx === 3 ? '#FCE7F3' : '#FEF3C7',
-                    padding: '20px',
-                    borderRadius: '12px',
-                    border: `2px solid ${idx === 0 ? '#6B7280' : 
-                                         idx === 1 ? '#3B82F6' : 
-                                         idx === 2 ? '#8B5CF6' : 
-                                         idx === 3 ? '#EC4899' : '#F59E0B'}`,
-                    textAlign: 'center'
-                  }}>
-                    <div style={{ fontSize: '2rem', marginBottom: '8px' }}>
-                      {idx === 0 ? '🌱' : idx === 1 ? '📚' : idx === 2 ? '🚀' : idx === 3 ? '⭐' : '👑'}
+          {/* Line Chart - Trend */}
+          <div style={{ 
+            background: 'white', 
+            borderRadius: '16px', 
+            padding: '25px',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+            marginTop: '25px'
+          }}>
+            <h3 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Icons.Activity /> Level Growth Trend (Last 7 Days)
+            </h3>
+            <ResponsiveContainer width="100%" height={350}>
+              <LineChart data={DUMMY_DATA.levelTrend}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis dataKey="date" stroke="#6B7280" fontSize={12} />
+                <YAxis stroke="#6B7280" fontSize={12} />
+                <Tooltip 
+                  contentStyle={{
+                    background: 'white',
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Legend />
+                <Line type="monotone" dataKey="Beginner" stroke="#6B7280" strokeWidth={3} dot={{ r: 5 }} />
+                <Line type="monotone" dataKey="Learner" stroke="#3B82F6" strokeWidth={3} dot={{ r: 5 }} />
+                <Line type="monotone" dataKey="Advanced" stroke="#8B5CF6" strokeWidth={3} dot={{ r: 5 }} />
+                <Line type="monotone" dataKey="Expert" stroke="#EC4899" strokeWidth={3} dot={{ r: 5 }} />
+                <Line type="monotone" dataKey="Master" stroke="#FFD700" strokeWidth={3} dot={{ r: 5 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </section>
+
+        {/* ============ 2. TOP PERFORMING STUDENTS ============ */}
+        <section style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #FFD700, #FFA500)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white'
+            }}>
+              <Icons.Award />
+            </div>
+            <div>
+              <h2 style={{ color: '#1F2937', margin: 0, fontSize: '1.5rem' }}>Top Performing Students</h2>
+              <p style={{ color: '#6B7280', margin: 0, fontSize: '0.9rem' }}>
+                Highest points, longest streaks, most active learners
+              </p>
+            </div>
+          </div>
+
+          {/* Top Performers Grid */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '20px',
+            marginBottom: '30px'
+          }}>
+            {/* Highest Points */}
+            <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.1rem' }}>
+                <span>🏆</span> Highest Points
+              </h3>
+              <div style={{ spaceY: '12px' }}>
+                {DUMMY_DATA.topStudents.slice(0, 5).map((student) => (
+                  <div 
+                    key={student.rank}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px',
+                      borderRadius: '10px',
+                      background: student.rank <= 3 ? 
+                        (student.rank === 1 ? '#FEF3C7' : 
+                         student.rank === 2 ? '#F3F4F6' : '#FEFCE8') 
+                        : 'white',
+                      marginBottom: '8px',
+                      border: student.rank === 1 ? '2px solid #FFD700' : '1px solid #E5E7EB',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.transform = 'translateX(5px)'; }}
+                  >
+                    <div style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      background: student.rank === 1 ? 'linear-gradient(135deg, #FFD700, #FFA500)' :
+                                 student.rank === 2 ? 'linear-gradient(135deg, #C0C0C0, #A0A0A0)' :
+                                 student.rank === 3 ? 'linear-gradient(135deg, #CD7F32, #8B4513)' : '#E5E7EB',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: student.rank <= 3 ? 'white' : '#6B7280',
+                      fontWeight: 'bold',
+                      fontSize: '0.9rem'
+                    }}>
+                      {student.rank}
                     </div>
-                    <h4 style={{ margin: '0 0 5px 0', color: '#1F2937' }}>{level.level}</h4>
-                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: idx === 0 ? '#6B7280' : idx === 1 ? '#3B82F6' : idx === 2 ? '#8B5CF6' : idx === 3 ? '#EC4899' : '#F59E0B' }}>
-                      {level.count}
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: '700', color: '#1F2937', fontSize: '0.95rem' }}>{student.name}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>{student.grade} • {student.level}</div>
                     </div>
-                    <p style={{ margin: '5px 0 0 0', fontSize: '0.875rem', color: '#6B7280' }}>
-                      students
-                    </p>
+                    <div style={{ 
+                      fontWeight: '800', 
+                      fontSize: '1.2rem', 
+                      color: '#F59E0B',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}>
+                      ⭐ {student.points}
+                    </div>
                   </div>
                 ))}
               </div>
-
-              {/* Charts Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px' }}>
-                {/* Bar Chart */}
-                <div>
-                  <h4 style={{ color: '#1F2937', marginBottom: '15px' }}>Students by Level</h4>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={levelDistribution}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="level" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="count" name="Students" fill="#4F46E5" radius={[8, 8, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-
-                {/* Pie Chart */}
-                <div>
-                  <h4 style={{ color: '#1F2937', marginBottom: '15px' }}>Level Distribution</h4>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={levelDistribution}
-                        dataKey="count"
-                        nameKey="level"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        label={({ level, percent }) => `${level}: ${(percent * 100).toFixed(0)}%`}
-                      >
-                        {levelDistribution.map((entry, index) => {
-                          const colors = ['#6B7280', '#3B82F6', '#8B5CF6', '#EC4899', '#FFD700'];
-                          return <circle key={index} fill={colors[index % colors.length]} />;
-                        })}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
             </div>
 
-            {/* Guide Students Section */}
-            <div style={{ background: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', padding: '20px', marginTop: '30px' }}>
-              <h2 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span>🎯</span> Quick Guidance Actions
-              </h2>
-              <p style={{ color: '#6B7280', marginBottom: '20px' }}>
-                Use these quick actions to help students who need attention:
-              </p>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
-                <button 
-                  onClick={() => {
-                    // Navigate to students with filters
-                    setActiveTab('students');
-                  }}
-                  style={{
-                    padding: '15px',
-                    border: '2px solid #EF4444',
-                    borderRadius: '10px',
-                    background: '#FEF2F2',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  <div style={{ fontSize: '1.5rem', marginBottom: '5px' }}>🔴</div>
-                  <strong style={{ color: '#EF4444', display: 'block', marginBottom: '5px' }}>
-                    Help Struggling Students
-                  </strong>
-                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>
-                    View students with low scores (< 50%) and send them encouragement
-                  </span>
-                </button>
-
-                <button 
-                  onClick={() => setActiveTab('students')}
-                  style={{
-                    padding: '15px',
-                    border: '2px solid #F59E0B',
-                    borderRadius: '10px',
-                    background: '#FFFBEB',
-                    cursor: 'pointer',
-                    textAlign: 'left'
-                  }}
-                >
-                  <div style={{ fontSize: '1.5rem', marginBottom: '5px' }}>🟡</div>
-                  <strong style={{ color: '#D97706', display: 'block', marginBottom: '5px' }}>
-                    Encourage Inactive Students
-                  </strong>
-                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>
-                    Students who haven't logged in for 3+ days - send them reminder
-                  </span>
-                </button>
-
-                <button 
-                  onClick={() => navigate('/admin/analytics')}
-                  style={{
-                    padding: '15px',
-                    border: '2px solid #10B981',
-                    borderRadius: '10px',
-                    background: '#ECFDF5',
-                    cursor: 'pointer',
-                    textAlign: 'left'
-                  }}
-                >
-                  <div style={{ fontSize: '1.5rem', marginBottom: '5px' }}>🟢</div>
-                  <strong style={{ color: '#059669', display: 'block', marginBottom: '5px' }}>
-                    View Full Analytics
-                  </strong>
-                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>
-                    Deep dive into charts, graphs, and performance trends
-                  </span>
-                </button>
-
-                <button 
-                  onClick={() => setActiveTab('students')}
-                  style={{
-                    padding: '15px',
-                    border: '2px solid #3B82F6',
-                    borderRadius: '10px',
-                    background: '#EFF6FF',
-                    cursor: 'pointer',
-                    textAlign: 'left'
-                  }}
-                >
-                  <div style={{ fontSize: '1.5rem', marginBottom: '5px' }}>🔵</div>
-                  <strong style={{ color: '#2563EB', display: 'block', marginBottom: '5px' }}>
-                    Challenge Top Performers
-                  </strong>
-                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>
-                    Identify high-achieving students and offer advanced content
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            {/* Leaderboard Section */}
-            <div style={{ background: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', padding: '20px' }}>
-              <h2 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span>🏆</span> Top Leaderboard - Top 10 Students
-              </h2>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ borderBottom: '2px solid #E5E7EB' }}>
-                    <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Rank</th>
-                    <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Student</th>
-                    <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Level</th>
-                    <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Lessons Completed</th>
-                    <th style={{ textAlign: 'right', padding: '12px', color: '#6B7280' }}>Points</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {leaderboard.map((student, index) => (
-                    <tr key={student._id} style={{ borderBottom: '1px solid #E5E7EB' }}>
-                      <td style={{ padding: '12px' }}>
-                        <span style={{ 
-                          display: 'inline-flex', 
-                          alignItems: 'center', 
-                          justifyContent: 'center',
-                          width: '30px', 
-                          height: '30px', 
-                          borderRadius: '50%',
-                          background: index === 0 ? 'linear-gradient(135deg, #FFD700, #FFA500)' : 
-                                     index === 1 ? 'linear-gradient(135deg, #C0C0C0, #808080)' : 
-                                     index === 2 ? 'linear-gradient(135deg, #CD7F32, #8B4513)' : '#E5E7EB',
-                          color: index < 3 ? 'white' : '#6B7280',
-                          fontWeight: 'bold'
-                        }}>
-                          {index + 1}
-                        </span>
-                      </td>
-                      <td style={{ padding: '12px', fontWeight: '600' }}>{student.username}</td>
-                      <td style={{ padding: '12px' }}>
-                        <span style={{ 
-                          padding: '4px 12px', 
-                          borderRadius: '20px', 
-                          fontSize: '0.875rem',
-                          background: student.level === 'Master' ? '#FEF3C7' : 
-                                     student.level === 'Expert' ? '#F3E8FF' : 
-                                     student.level === 'Advanced' ? '#D1FAE5' : 
-                                     student.level === 'Learner' ? '#DBEAFE' : '#E5E7EB',
-                          color: student.level === 'Master' ? '#92400E' : 
-                                 student.level === 'Expert' ? '#7C3AED' : 
-                                 student.level === 'Advanced' ? '#059669' : 
-                                 student.level === 'Learner' ? '#2563EB' : '#6B7280'
-                        }}>
-                          {student.level}
-                        </span>
-                      </td>
-                      <td style={{ padding: '12px' }}>{student.completedLessons?.length || 0}</td>
-                      <td style={{ padding: '12px', textAlign: 'right', fontWeight: 'bold', color: '#4F46E5' }}>{student.points}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {leaderboard.length === 0 && (
-                <p style={{ textAlign: 'center', color: '#6B7280', padding: '40px' }}>No students yet</p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Content Tab - Original Content Management */}
-        {activeTab === 'content' && (
-          <div>
-            {/* Page Title */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-              <div>
-                <h2 style={{ color: '#1F2937', margin: 0 }}>Content Management</h2>
-                <p style={{ color: '#6B7280', margin: '5px 0 0 0' }}>Manage grades, subjects, and lessons in hierarchical order</p>
-              </div>
-              <button className="btn btn-primary" onClick={() => openModal('grade')} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Icons.Add /> Add Grade
-              </button>
-            </div>
-
-        {/* Hierarchical Content Display */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {content.map((gradeData) => (
-            <div key={gradeData.grade._id} style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-              {/* Grade Header */}
-              <div 
-                onClick={() => toggleGrade(gradeData.grade._id)}
-                style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'space-between',
-                  padding: '20px', 
-                  background: expandedGrades[gradeData.grade._id] ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#F9FAFB',
-                  color: expandedGrades[gradeData.grade._id] ? 'white' : '#1F2937',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  <div style={{ 
-                    width: '48px', 
-                    height: '48px', 
-                    background: expandedGrades[gradeData.grade._id] ? 'rgba(255,255,255,0.2)' : '#EEF2FF',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: expandedGrades[gradeData.grade._id] ? 'white' : '#4F46E5'
-                  }}>
-                    <Icons.Grade />
-                  </div>
-                  <div>
-                    <h3 style={{ margin: 0, fontSize: '1.2rem' }}>{gradeData.grade.displayName}</h3>
-                    <p style={{ margin: '3px 0 0 0', opacity: 0.8, fontSize: '0.9rem' }}>{gradeData.subjects.length} Subjects</p>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); openModal('subject', null, gradeData.grade._id); }}
-                    style={{ 
-                      background: expandedGrades[gradeData.grade._id] ? 'rgba(255,255,255,0.2)' : '#4F46E5', 
-                      color: 'white', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer',
-                      display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.85rem'
+            {/* Longest Streaks */}
+            <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.1rem' }}>
+                <Icons.Flame /> Longest Streaks
+              </h3>
+              <div style={{ spaceY: '12px' }}>
+                {DUMMY_DATA.topStudents
+                  .sort((a, b) => b.streak - a.streak)
+                  .slice(0, 5)
+                  .map((student, idx) => (
+                  <div 
+                    key={idx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px',
+                      borderRadius: '10px',
+                      background: '#FEF3C7',
+                      border: '1px solid #F59E0B',
+                      marginBottom: '8px'
                     }}
                   >
-                    <Icons.Add /> Subject
-                  </button>
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); openModal('grade', gradeData.grade); }}
-                    style={{ background: 'rgba(255,255,255,0.2)', border: 'none', padding: '8px', borderRadius: '8px', cursor: 'pointer', color: 'white' }}
+                    <div style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #FF6B00, #FFD700)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      fontSize: '0.9rem'
+                    }}>
+                      🔥
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: '700', color: '#1F2937', fontSize: '0.95rem' }}>{student.name}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>{student.lessons} lessons completed</div>
+                    </div>
+                    <div style={{ 
+                      fontWeight: '800', 
+                      fontSize: '1.2rem', 
+                      color: '#F97316'
+                    }}>
+                      {student.streak} days
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Most Active */}
+            <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.1rem' }}>
+                <Icons.Activity /> Most Active
+              </h3>
+              <div style={{ spaceY: '12px' }}>
+                {DUMMY_DATA.topStudents
+                  .sort((a, b) => b.lessons - a.lessons)
+                  .slice(0, 5)
+                  .map((student, idx) => (
+                  <div 
+                    key={idx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px',
+                      borderRadius: '10px',
+                      background: '#ECFDF5',
+                      border: '1px solid #10B981',
+                      marginBottom: '8px'
+                    }}
                   >
-                    <Icons.Edit />
-                  </button>
-                  {expandedGrades[gradeData.grade._id] ? <Icons.ChevronDown /> : <Icons.ChevronRight />}
-                </div>
-              </div>
-
-              {/* Subjects */}
-              {expandedGrades[gradeData.grade._id] && (
-                <div style={{ borderTop: '1px solid #E5E7EB' }}>
-                  {gradeData.subjects.map((subjectData) => (
-                    <div key={subjectData.subject._id} style={{ borderBottom: '1px solid #E5E7EB' }}>
-                      {/* Subject Header */}
-                      <div 
-                        onClick={() => toggleSubject(subjectData.subject._id)}
-                        style={{ 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          justifyContent: 'space-between',
-                          padding: '15px 20px 15px 40px', 
-                          background: expandedSubjects[subjectData.subject._id] ? '#EEF2FF' : 'white',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s'
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <div style={{ 
-                            width: '40px', 
-                            height: '40px', 
-                            background: subjectData.subject.color || '#4F46E5',
-                            borderRadius: '10px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '1.2rem'
-                          }}>
-                            {getSubjectIcon(subjectData.subject.name)}
-                          </div>
-                          <div>
-                            <h4 style={{ margin: 0, color: '#1F2937' }}>{subjectData.subject.displayName}</h4>
-                            <p style={{ margin: '3px 0 0 0', color: '#6B7280', fontSize: '0.85rem' }}>{subjectData.lessonCount} Lessons</p>
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); openModal('lesson', null, subjectData.subject._id); }}
-                            style={{ 
-                              background: subjectData.subject.color || '#4F46E5', 
-                              color: 'white', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer',
-                              fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '5px'
-                            }}
-                          >
-                            <Icons.Add /> Lesson
-                          </button>
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); openModal('subject', subjectData.subject); }}
-                            style={{ background: '#F3F4F6', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer', color: '#6B7280' }}
-                          >
-                            <Icons.Edit />
-                          </button>
-                          {expandedSubjects[subjectData.subject._id] ? <Icons.ChevronDown /> : <Icons.ChevronRight />}
-                        </div>
-                      </div>
-
-                      {/* Lessons */}
-                      {expandedSubjects[subjectData.subject._id] && (
-                        <div style={{ background: '#F9FAFB', padding: '10px 20px 10px 60px' }}>
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '10px' }}>
-                            {subjectData.lessons?.map((lesson) => (
-                              <div key={lesson._id} style={{ 
-                                background: 'white', 
-                                borderRadius: '8px', 
-                                padding: '15px',
-                                border: '1px solid #E5E7EB',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center'
-                              }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
-                                  <div style={{ 
-                                    width: '32px', 
-                                    height: '32px', 
-                                    background: '#EEF2FF',
-                                    borderRadius: '6px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#4F46E5'
-                                  }}>
-                                    <Icons.Lesson />
-                                  </div>
-                                  <div style={{ flex: 1, minWidth: 0 }}>
-                                    <p style={{ margin: 0, fontWeight: '600', color: '#1F2937', fontSize: '0.9rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                      {lesson.title}
-                                    </p>
-                                    <div style={{ display: 'flex', gap: '10px', marginTop: '3px' }}>
-                                      {lesson.videoUrl && <span style={{ fontSize: '0.7rem', color: '#10B981' }}>📹 Video</span>}
-                                      {lesson.quiz?.length > 0 && <span style={{ fontSize: '0.7rem', color: '#F59E0B' }}>❓ {lesson.quiz.length} Qs</span>}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div style={{ display: 'flex', gap: '5px' }}>
-                                  <button 
-                                    onClick={() => openModal('lesson', lesson)}
-                                    style={{ background: '#F3F4F6', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer', color: '#6B7280' }}
-                                  >
-                                    <Icons.Edit />
-                                  </button>
-                                  <button 
-                                    onClick={() => handleDelete('lessons', lesson._id)}
-                                    style={{ background: '#FEE2E2', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer', color: '#EF4444' }}
-                                  >
-                                    <Icons.Delete />
-                                  </button>
-                                </div>
-                              </div>
-                            ))}
-                            {(!subjectData.lessons || subjectData.lessons.length === 0) && (
-                              <p style={{ color: '#9CA3AF', fontSize: '0.9rem', gridColumn: '1 / -1', textAlign: 'center', padding: '20px' }}>
-                                No lessons yet. Click "Lesson" to add one.
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      )}
+                    <div style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #10B981, #059669)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      fontSize: '0.9rem'
+                    }}>
+                      📚
                     </div>
-                  ))}
-                  {gradeData.subjects.length === 0 && (
-                    <div style={{ padding: '30px', textAlign: 'center', color: '#9CA3AF' }}>
-                      No subjects yet. Click "Subject" to add one.
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: '700', color: '#1F2937', fontSize: '0.95rem' }}>{student.name}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>{student.points} total points</div>
                     </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-
-          {content.length === 0 && (
-            <div style={{ background: 'white', borderRadius: '12px', padding: '60px', textAlign: 'center' }}>
-              <div style={{ width: '80px', height: '80px', background: '#F3F4F6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-                <Icons.Grade />
+                    <div style={{ 
+                      fontWeight: '800', 
+                      fontSize: '1.2rem', 
+                      color: '#10B981'
+                    }}>
+                      {student.lessons} lessons
+                    </div>
+                  </div>
+                ))}
               </div>
-              <h3 style={{ color: '#1F2937', marginBottom: '10px' }}>No Content Yet</h3>
-              <p style={{ color: '#6B7280', marginBottom: '20px' }}>Start by adding a grade to create your content hierarchy</p>
-              <button className="btn btn-primary" onClick={() => openModal('grade')}>
-                <Icons.Add /> Add First Grade
-              </button>
-            </div>
-          )}
-        </div>
-        </div>
-        )}
-
-        {/* Students Tab */}
-        {activeTab === 'students' && (
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-              <div>
-                <h2 style={{ color: '#1F2937', margin: 0 }}>Student Management</h2>
-                <p style={{ color: '#6B7280', margin: '5px 0 0 0' }}>View and manage all registered students</p>
-              </div>
-              <div style={{ background: 'white', padding: '8px 16px', borderRadius: '8px' }}>
-                <strong>{students.length}</strong> Students Registered
-              </div>
-            </div>
-
-            {/* Quick Filters */}
-            <div style={{ background: 'white', padding: '15px', borderRadius: '12px', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
-              <strong style={{ color: '#6B7280' }}>Quick Filters:</strong>
-              <button 
-                onClick={() => {/* TODO: filter students */}}
-                style={{ padding: '8px 16px', border: '1px solid #E5E7EB', borderRadius: '8px', background: 'white', cursor: 'pointer' }}
-              >
-                🔴 Struggling (<50%)
-              </button>
-              <button 
-                onClick={() => {/* TODO: filter students */}}
-                style={{ padding: '8px 16px', border: '1px solid #F59E0B', borderRadius: '8px', background: '#FFFBEB', cursor: 'pointer' }}
-              >
-                🟡 Inactive (3+ days)
-              </button>
-              <button 
-                onClick={() => {/* TODO: filter students */}}
-                style={{ padding: '8px 16px', border: '1px solid #10B981', borderRadius: '8px', background: '#ECFDF5', cursor: 'pointer' }}
-              >
-                🟢 High Achievers
-              </button>
-              <button 
-                onClick={() => {/* TODO: clear filters */}}
-                style={{ padding: '8px 16px', border: '1px solid #6B7280', borderRadius: '8px', background: '#F9FAFB', cursor: 'pointer' }}
-              >
-                Show All
-              </button>
-            </div>
-
-            <div style={{ background: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ background: '#F9FAFB', borderBottom: '2px solid #E5E7EB' }}>
-                    <th style={{ textAlign: 'left', padding: '15px', color: '#6B7280', fontWeight: '600' }}>#</th>
-                    <th style={{ textAlign: 'left', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Username</th>
-                    <th style={{ textAlign: 'left', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Grade</th>
-                    <th style={{ textAlign: 'left', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Level</th>
-                    <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Points</th>
-                    <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Streak</th>
-                    <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Lessons</th>
-                    <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Badges</th>
-                    <th style={{ textAlign: 'center', padding: '15px', color: '#6B7280', fontWeight: '600' }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {students.map((student, index) => {
-                    // Determine if student needs attention
-                    const needsHelp = student.points < 500 || (student.streak?.current < 3 && student.completedLessons?.length > 0);
-                    
-                    return (
-                      <tr key={student._id} style={{ 
-                        borderBottom: '1px solid #E5E7EB',
-                        background: needsHelp ? '#FEF2F2' : 'transparent'
-                      }}>
-                        <td style={{ padding: '15px' }}>{index + 1}</td>
-                        <td style={{ padding: '15px', fontWeight: '600' }}>{student.username}</td>
-                        <td style={{ padding: '15px' }}>{student.grade?.displayName || 'Not assigned'}</td>
-                        <td style={{ padding: '15px' }}>
-                          <span style={{ 
-                            padding: '4px 12px', 
-                            borderRadius: '20px', 
-                            fontSize: '0.875rem',
-                            background: student.level === 'Master' ? '#FEF3C7' : 
-                                      student.level === 'Expert' ? '#F3E8FF' : 
-                                      student.level === 'Advanced' ? '#D1FAE5' : 
-                                      student.level === 'Learner' ? '#DBEAFE' : '#E5E7EB',
-                            color: student.level === 'Master' ? '#92400E' : 
-                                  student.level === 'Expert' ? '#7C3AED' : 
-                                  student.level === 'Advanced' ? '#059669' : 
-                                  student.level === 'Learner' ? '#2563EB' : '#6B7280'
-                          }}>
-                            {student.level}
-                          </span>
-                        </td>
-                        <td style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', color: '#4F46E5' }}>{student.points}</td>
-                        <td style={{ padding: '15px', textAlign: 'center' }}>
-                          <span style={{ color: student.streak?.current > 0 ? '#F97316' : '#6B7280' }}>
-                            🔥 {student.streak?.current || 0}
-                          </span>
-                        </td>
-                        <td style={{ padding: '15px', textAlign: 'center' }}>{student.completedLessons?.length || 0}</td>
-                        <td style={{ padding: '15px', textAlign: 'center' }}>{student.badges?.length || 0}</td>
-                        <td style={{ padding: '15px', textAlign: 'center' }}>
-                          <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
-                            <button 
-                              onClick={() => {/* Send encouragement */}}
-                              title="Send Encouragement"
-                              style={{ 
-                                padding: '6px 12px', 
-                                border: 'none', 
-                                borderRadius: '6px', 
-                                background: '#ECFDF5',
-                                color: '#059669',
-                                cursor: 'pointer',
-                                fontSize: '0.875rem'
-                              }}
-                            >
-                              💬 Encourage
-                            </button>
-                            <button 
-                              onClick={() => {/* View progress */}}
-                              title="View Progress"
-                              style={{ 
-                                padding: '6px 12px', 
-                                border: 'none', 
-                                borderRadius: '6px', 
-                                background: '#EFF6FF',
-                                color: '#2563EB',
-                                cursor: 'pointer',
-                                fontSize: '0.875rem'
-                              }}
-                            >
-                              📊 Progress
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              {students.length === 0 && (
-                <div style={{ padding: '40px', textAlign: 'center', color: '#6B7280' }}>
-                  <Icons.Users />
-                  <p>No students registered yet</p>
-                </div>
-              )}
             </div>
           </div>
-        )}
-      </main>
+        </section>
 
-      {/* Modal */}
-      {showModal && (
-        <div style={{ 
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-          background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', 
-          justifyContent: 'center', zIndex: 1000, padding: '20px' 
-        }}>
+        {/* ============ 3. WEAK STUDENTS / NEED ATTENTION ============ */}
+        <section style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #EF4444, #DC2626)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white'
+            }}>
+              <Icons.AlertTriangle />
+            </div>
+            <div>
+              <h2 style={{ color: '#1F2937', margin: 0, fontSize: '1.5rem' }}>Students Need Attention</h2>
+              <p style={{ color: '#6B7280', margin: 0, fontSize: '0.9rem' }}>
+                Identify and help struggling students immediately
+              </p>
+            </div>
+          </div>
+
           <div style={{ 
-            background: 'white', borderRadius: '16px', padding: '30px', 
-            width: '100%', maxWidth: '700px', maxHeight: '90vh', overflowY: 'auto' 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '20px' 
           }}>
-            {/* Modal Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px', borderBottom: '1px solid #E5E7EB', paddingBottom: '15px' }}>
-              <h2 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                {modalType === 'grade' && <><Icons.Grade /> {editItem ? 'Edit Grade' : 'Add New Grade'}</>}
-                {modalType === 'subject' && <><Icons.Subject /> {editItem ? 'Edit Subject' : 'Add New Subject'}</>}
-                {modalType === 'lesson' && <><Icons.Lesson /> {editItem ? 'Edit Lesson' : 'Add New Lesson'}</>}
-              </h2>
-              <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '5px' }}>
-                <Icons.Close />
+            {/* Low Performers Alert */}
+            <div style={{ background: '#FEF2F2', borderRadius: '16px', padding: '25px', border: '2px solid #EF4444' }}>
+              <h3 style={{ color: '#DC2626', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Icons.TrendingDown size={20} /> Low Performers ({'<50% avg'})
+              </h3>
+              <div style={{ marginBottom: '15px' }}>
+                <div style={{ fontSize: '3rem', fontWeight: '800', color: '#DC2626', marginBottom: '5px' }}>
+                  {DUMMY_DATA.weakStudents.lowPerformers.length}
+                </div>
+                <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: 0 }}>students scoring below 50%</p>
+              </div>
+              <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                {DUMMY_DATA.weakStudents.lowPerformers.map((student, idx) => (
+                  <div key={idx} style={{
+                    background: 'white',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    marginBottom: '8px',
+                    borderLeft: '4px solid #EF4444'
+                  }}>
+                    <div style={{ fontWeight: '700', color: '#1F2937', fontSize: '0.9rem' }}>{student.name}</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#6B7280', marginTop: '4px' }}>
+                      <span>Avg: <strong style={{ color: '#DC2626' }}>{student.avgScore}%</strong></span>
+                      <span>{student.quizzes} quizzes</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Inactive Students */}
+            <div style={{ background: '#FFFBEB', borderRadius: '16px', padding: '25px', border: '2px solid #F59E0B' }}>
+              <h3 style={{ color: '#D97706', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Icons.Clock size={20} /> Inactive Students
+              </h3>
+              <div style={{ marginBottom: '15px' }}>
+                <div style={{ fontSize: '3rem', fontWeight: '800', color: '#D97706', marginBottom: '5px' }}>
+                  {DUMMY_DATA.weakStudents.inactive.length}
+                </div>
+                <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: 0 }}>no login for 7+ days</p>
+              </div>
+              <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                {DUMMY_DATA.weakStudents.inactive.map((student, idx) => (
+                  <div key={idx} style={{
+                    background: 'white',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    marginBottom: '8px',
+                    borderLeft: '4px solid #F59E0B'
+                  }}>
+                    <div style={{ fontWeight: '700', color: '#1F2937', fontSize: '0.9rem' }}>{student.name}</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#6B7280', marginTop: '4px' }}>
+                      <span>Last: {student.lastLogin}</span>
+                      <span><strong style={{ color: '#D97706' }}>{student.daysInactive} days</strong></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Losing Streaks */}
+            <div style={{ background: '#F3E8FF', borderRadius: '16px', padding: '25px', border: '2px solid #8B5CF6' }}>
+              <h3 style={{ color: '#7C3AED', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Icons.Flame size={20} /> Losing Streaks
+              </h3>
+              <div style={{ marginBottom: '15px' }}>
+                <div style={{ fontSize: '3rem', fontWeight: '800', color: '#7C3AED', marginBottom: '5px' }}>
+                  {DUMMY_DATA.weakStudents.losingStreak.length}
+                </div>
+                <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: 0 }}>broken long streaks</p>
+              </div>
+              <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                {DUMMY_DATA.weakStudents.losingStreak.map((student, idx) => (
+                  <div key={idx} style={{
+                    background: 'white',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    marginBottom: '8px',
+                    borderLeft: '4px solid #8B5CF6'
+                  }}>
+                    <div style={{ fontWeight: '700', color: '#1F2937', fontSize: '0.9rem' }}>{student.name}</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#6B7280', marginTop: '4px' }}>
+                      <span>Peak: {student.longest} days</span>
+                      <span>Now: <strong style={{ color: '#7C3AED' }}>{student.streak} days</strong></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Failed Quizzes */}
+            <div style={{ background: '#FCE7F3', borderRadius: '16px', padding: '25px', border: '2px solid #EC4899' }}>
+              <h3 style={{ color: '#DB2777', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Icons.XCircle size={20} /> Failed Quizzes
+              </h3>
+              <div style={{ marginBottom: '15px' }}>
+                <div style={{ fontSize: '3rem', fontWeight: '800', color: '#DB2777', marginBottom: '5px' }}>
+                  {DUMMY_DATA.weakStudents.failedQuizzes.length}
+                </div>
+                <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: 0 }}>students with multiple failures</p>
+              </div>
+              <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                {DUMMY_DATA.weakStudents.failedQuizzes.map((student, idx) => (
+                  <div key={idx} style={{
+                    background: 'white',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    marginBottom: '8px',
+                    borderLeft: '4px solid #EC4899'
+                  }}>
+                    <div style={{ fontWeight: '700', color: '#1F2937', fontSize: '0.9rem' }}>{student.name}</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#6B7280', marginTop: '4px' }}>
+                      <span>{student.failed} failed / {student.total} total</span>
+                      <span><strong style={{ color: '#DB2777' }}>{Math.round(student.failed/student.total*100)}% fail rate</strong></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ============ 4. GRADE-WISE ANALYTICS ============ */}
+        <section style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #3B82F6, #1E40AF)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white'
+            }}>
+              <Icons.GraduationCap />
+            </div>
+            <div>
+              <h2 style={{ color: '#1F2937', margin: 0, fontSize: '1.5rem' }}>Grade-wise Student Analytics</h2>
+              <p style={{ color: '#6B7280', margin: 0, fontSize: '0.9rem' }}>
+                Performance metrics across all grades
+              </p>
+            </div>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', 
+            gap: '25px' 
+          }}>
+            {/* Bar Chart - Students per Grade */}
+            <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ color: '#1F2937', marginBottom: '20px', fontSize: '1.1rem' }}>
+                Students per Grade
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={DUMMY_DATA.gradeAnalytics}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                  <XAxis dataKey="grade" stroke="#6B7280" fontSize={12} />
+                  <YAxis stroke="#6B7280" fontSize={12} />
+                  <Tooltip 
+                    contentStyle={{
+                      background: 'white',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="students" name="Students" fill="#3B82F6" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Donut Chart - Completion Rate */}
+            <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ color: '#1F2937', marginBottom: '20px', fontSize: '1.1rem' }}>
+                Completion Rate by Grade
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={DUMMY_DATA.gradeAnalytics}
+                    dataKey="students"
+                    nameKey="grade"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    innerRadius={60}
+                    paddingAngle={2}
+                    label={({ grade, percent }) => `${grade}: ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {DUMMY_DATA.gradeAnalytics.map((entry, index) => {
+                      const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
+                      return <Cell key={index} fill={colors[index % colors.length]} />;
+                    })}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{
+                      background: 'white',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Grade Stats Cards */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+            gap: '15px',
+            marginTop: '25px'
+          }}>
+            {DUMMY_DATA.gradeAnalytics.map((grade, idx) => (
+              <div 
+                key={grade.grade}
+                style={{
+                  background: 'white',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                  borderTop: `4px solid ${['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'][idx]}`
+                }}
+              >
+                <div style={{ color: '#6B7280', fontSize: '0.875rem', fontWeight: '600', marginBottom: '5px' }}>
+                  {grade.grade}
+                </div>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937', marginBottom: '10px' }}>
+                  {grade.students}
+                </div>
+                <div style={{ display: 'flex', gap: '15px', fontSize: '0.8rem' }}>
+                  <span style={{ color: '#6B7280' }}>
+                    ⭐ {grade.avgPoints} pts
+                  </span>
+                  <span style={{ color: '#6B7280' }}>
+                    🔥 {grade.avgStreak}d
+                  </span>
+                </div>
+                <div style={{ marginTop: '10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '4px' }}>
+                    <span>Completion</span>
+                    <span style={{ fontWeight: '700', color: '#10B981' }}>{grade.completionRate}%</span>
+                  </div>
+                  <div style={{ height: '6px', background: '#E5E7EB', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div style={{ 
+                      height: '100%', 
+                      width: `${grade.completionRate}%`, 
+                      background: 'linear-gradient(90deg, #10B981, #059669)',
+                      borderRadius: '3px'
+                    }}></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ============ 5. SUBJECT-WISE PERFORMANCE ============ */}
+        <section style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white'
+            }}>
+              <Icons.BookOpen />
+            </div>
+            <div>
+              <h2 style={{ color: '#1F2937', margin: 0, fontSize: '1.5rem' }}>Subject-wise Performance</h2>
+              <p style={{ color: '#6B7280', margin: 0, fontSize: '0.9rem' }}>
+                Average scores and completion rates by subject
+              </p>
+            </div>
+          </div>
+
+          <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={DUMMY_DATA.subjectPerformance}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis dataKey="subject" stroke="#6B7280" fontSize={12} />
+                <YAxis stroke="#6B7280" fontSize={12} yAxisId="left" />
+                <YAxis stroke="#6B7280" fontSize={12} orientation="right" yAxisId="right" />
+                <Tooltip 
+                  contentStyle={{
+                    background: 'white',
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Legend />
+                <Bar yAxisId="left" dataKey="avgScore" name="Avg Score %" fill="#3B82F6" radius={[8, 8, 0, 0]} />
+                <Bar yAxisId="right" dataKey="completionRate" name="Completion %" fill="#10B981" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Subject Cards */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
+            gap: '15px',
+            marginTop: '20px'
+          }}>
+            {DUMMY_DATA.subjectPerformance.map((subject, idx) => (
+              <div key={subject.subject} style={{
+                background: 'white',
+                padding: '20px',
+                borderRadius: '12px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                textAlign: 'center',
+                borderTop: `4px solid ${['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'][idx]}`
+              }}>
+                <div style={{ fontSize: '1.8rem', marginBottom: '8px' }}>
+                  {['🧮', '🔬', '📖', '📜', '🌍'][idx]}
+                </div>
+                <h4 style={{ margin: '0 0 10px 0', color: '#1F2937', fontSize: '1rem' }}>{subject.subject}</h4>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937', marginBottom: '5px' }}>
+                  {subject.avgScore}%
+                </div>
+                <div style={{ 
+                  height: '8px', 
+                  background: '#E5E7EB', 
+                  borderRadius: '4px', 
+                  overflow: 'hidden',
+                  marginTop: '8px'
+                }}>
+                  <div style={{ 
+                    height: '100%', 
+                    width: `${subject.avgScore}%`, 
+                    background: subject.avgScore >= 80 ? '#10B981' : subject.avgScore >= 70 ? '#3B82F6' : '#F59E0B',
+                    borderRadius: '4px'
+                  }}></div>
+                </div>
+                <p style={{ fontSize: '0.8rem', color: '#6B7280', marginTop: '8px', margin: 0 }}>
+                  {subject.students} students • {subject.completionRate}% completion
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ============ 6. DAILY/WEEKLY ACTIVITY ============ */}
+        <section style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #10B981, #059669)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white'
+            }}>
+              <Icons.Calendar />
+            </div>
+            <div>
+              <h2 style={{ color: '#1F2937', margin: 0, fontSize: '1.5rem' }}>Daily Activity Tracking</h2>
+              <p style={{ color: '#6B7280', margin: 0, fontSize: '0.9rem' }}>
+                Student engagement metrics over time
+              </p>
+            </div>
+          </div>
+
+          {/* Activity Stats */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+            gap: '15px',
+            marginBottom: '25px'
+          }}>
+            {[
+              { label: 'Active Today', value: DUMMY_DATA.overviewStats.activeToday, icon: Icons.Users, color: '#3B82F6' },
+              { label: 'Active This Week', value: DUMMY_DATA.overviewStats.activeThisWeek, icon: Icons.Activity, color: '#10B981' },
+              { label: 'Active This Month', value: DUMMY_DATA.overviewStats.activeThisMonth, icon: Icons.Calendar, color: '#F59E0B' },
+              { label: 'Lessons Today', value: DUMMY_DATA.overviewStats.lessonsCompletedToday, icon: Icons.BookOpen, color: '#8B5CF6' },
+              { label: 'Quizzes Today', value: DUMMY_DATA.overviewStats.quizzesTakenToday, icon: Icons.Target, color: '#EC4899' },
+              { label: 'New Today', value: DUMMY_DATA.overviewStats.newToday, icon: Icons.Gift, color: '#EF4444' }
+            ].map((stat, idx) => (
+              <div 
+                key={stat.label}
+                style={{
+                  background: 'white',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '15px'
+                }}
+              >
+                <div style={{
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '12px',
+                  background: `${stat.color}20`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: stat.color
+                }}>
+                  <stat.icon />
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.875rem', color: '#6B7280', fontWeight: '600' }}>{stat.label}</div>
+                  <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#1F2937' }}>
+                    {stat.value.toLocaleString()}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Activity Area Chart */}
+          <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+            <h3 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Icons.Activity /> Daily Activity Trends (Last 14 Days)
+            </h3>
+            <ResponsiveContainer width="100%" height={350}>
+              <AreaChart data={DUMMY_DATA.dailyActivity}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis dataKey="date" stroke="#6B7280" fontSize={12} />
+                <YAxis stroke="#6B7280" fontSize={12} />
+                <Tooltip 
+                  contentStyle={{
+                    background: 'white',
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Legend />
+                <Area type="monotone" dataKey="active" name="Active Students" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.3} strokeWidth={3} />
+                <Area type="monotone" dataKey="lessons" name="Lessons Completed" stroke="#10B981" fill="#10B981" fillOpacity={0.3} strokeWidth={3} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </section>
+
+        {/* ============ 7. LEADERBOARD ANALYTICS ============ */}
+        <section style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #F59E0B, #D97706)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white'
+            }}>
+              <Icons.Trophy />
+            </div>
+            <div>
+              <h2 style={{ color: '#1F2937', margin: 0, fontSize: '1.5rem' }}>Location & Leaderboard Analytics</h2>
+              <p style={{ color: '#6B7280', margin: 0, fontSize: '0.9rem' }}>
+                Top performing schools and villages
+              </p>
+            </div>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', 
+            gap: '25px' 
+          }}>
+            {/* Top Schools */}
+            <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Icons.School /> Top Performing Schools
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={DUMMY_DATA.schoolAnalytics} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                  <XAxis type="number" stroke="#6B7280" fontSize={12} />
+                  <YAxis dataKey="school" type="category" width={140} stroke="#6B7280" fontSize={11} />
+                  <Tooltip 
+                    contentStyle={{
+                      background: 'white',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="avgPoints" name="Avg Points" fill="#8B5CF6" radius={[0, 8, 8, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Top Villages */}
+            <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ color: '#1F2937', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Icons.Home /> Top Villages
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <ComposedChart data={DUMMY_DATA.villageAnalytics}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                  <XAxis dataKey="village" stroke="#6B7280" fontSize={10} interval={0} angle={-45} textAnchor="end" height={80} />
+                  <YAxis stroke="#6B7280" fontSize={12} />
+                  <Tooltip 
+                    contentStyle={{
+                      background: 'white',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="students" name="Students" fill="#3B82F6" radius={[8, 8, 0, 0]} />
+                  <Line type="monotone" dataKey="avgPoints" name="Avg Points" stroke="#F59E0B" strokeWidth={3} />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* School & Village Cards */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            gap: '15px',
+            marginTop: '20px'
+          }}>
+            {DUMMY_DATA.schoolAnalytics.map((school, idx) => (
+              <div key={school.school} style={{
+                background: 'white',
+                padding: '20px',
+                borderRadius: '12px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                borderLeft: `4px solid ${['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'][idx]}`
+              }}>
+                <h4 style={{ margin: '0 0 10px 0', color: '#1F2937', fontSize: '1rem', fontWeight: '700' }}>
+                  🏫 {school.school}
+                </h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '0.875rem' }}>
+                  <div>
+                    <span style={{ color: '#6B7280' }}>Students:</span>
+                    <div style={{ fontWeight: '800', fontSize: '1.2rem', color: '#1F2937' }}>{school.students}</div>
+                  </div>
+                  <div>
+                    <span style={{ color: '#6B7280' }}>Avg Points:</span>
+                    <div style={{ fontWeight: '800', fontSize: '1.2rem', color: '#3B82F6' }}>{school.avgPoints}</div>
+                  </div>
+                  <div>
+                    <span style={{ color: '#6B7280' }}>Avg Streak:</span>
+                    <div style={{ fontWeight: '800', fontSize: '1.2rem', color: '#F97316' }}>{school.avgStreak}🔥</div>
+                  </div>
+                  <div>
+                    <span style={{ color: '#6B7280' }}>Top Levels:</span>
+                    <div style={{ fontWeight: '800', fontSize: '1.2rem', color: '#8B5CF6' }}>{school.topLevels}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ============ QUICK ACTIONS ============ */}
+        <section style={{ marginBottom: '40px' }}>
+          <div style={{ 
+            background: 'linear-gradient(135deg, #667eea, #764ba2)', 
+            borderRadius: '20px', 
+            padding: '40px',
+            color: 'white',
+            boxShadow: '0 10px 40px rgba(102, 126, 234, 0.3)'
+          }}>
+            <h2 style={{ margin: '0 0 15px 0', fontSize: '1.75rem', fontWeight: '800' }}>
+              🎯 Quick Actions for Student Guidance
+            </h2>
+            <p style={{ margin: '0 0 30px 0', opacity: 0.9, fontSize: '1.1rem' }}>
+              Take immediate action to help students and improve learning outcomes
+            </p>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
+              gap: '15px' 
+            }}>
+              <button style={{
+                padding: '20px',
+                background: 'rgba(255,255,255,0.15)',
+                border: '2px solid rgba(255,255,255,0.3)',
+                borderRadius: '12px',
+                color: 'white',
+                cursor: 'pointer',
+                textAlign: 'left',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s'
+              }}>
+                <div style={{ fontSize: '2rem', marginBottom: '8px' }}>💬</div>
+                <div style={{ fontWeight: '700', fontSize: '1.1rem', marginBottom: '5px' }}>Send Encouragement</div>
+                <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>Message struggling students with motivational notes</div>
+              </button>
+              <button style={{
+                padding: '20px',
+                background: 'rgba(255,255,255,0.15)',
+                border: '2px solid rgba(255,255,255,0.3)',
+                borderRadius: '12px',
+                color: 'white',
+                cursor: 'pointer',
+                textAlign: 'left',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s'
+              }}>
+                <div style={{ fontSize: '2rem', marginBottom: '8px' }}>📊</div>
+                <div style={{ fontWeight: '700', fontSize: '1.1rem', marginBottom: '5px' }}>View Detailed Reports</div>
+                <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>Deep dive into individual student progress</div>
+              </button>
+              <button style={{
+                padding: '20px',
+                background: 'rgba(255,255,255,0.15)',
+                border: '2px solid rgba(255,255,255,0.3)',
+                borderRadius: '12px',
+                color: 'white',
+                cursor: 'pointer',
+                textAlign: 'left',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s'
+              }}>
+                <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🎯</div>
+                <div style={{ fontWeight: '700', fontSize: '1.1rem', marginBottom: '5px' }}>Assign Remedial Work</div>
+                <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>Create custom assignments for weak students</div>
+              </button>
+              <button style={{
+                padding: '20px',
+                background: 'rgba(255,255,255,0.15)',
+                border: '2px solid rgba(255,255,255,0.3)',
+                borderRadius: '12px',
+                color: 'white',
+                cursor: 'pointer',
+                textAlign: 'left',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s'
+              }}>
+                <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🏆</div>
+                <div style={{ fontWeight: '700', fontSize: '1.1rem', marginBottom: '5px' }}>Challenge Top Students</div>
+                <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>Send advanced content to high achievers</div>
               </button>
             </div>
-            
-            <form onSubmit={handleSubmit}>
-              {/* Grade Form */}
-              {modalType === 'grade' && (
-                <>
-                  <div className="form-group">
-                    <label>Grade Name (URL Slug)</label>
-                    <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value.toLowerCase().replace(/\s+/g, '_')})} required placeholder="e.g., grade_6" style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                  </div>
-                  <div className="form-group">
-                    <label>Display Name</label>
-                    <input type="text" value={formData.displayName} onChange={(e) => setFormData({...formData, displayName: e.target.value})} required placeholder="e.g., Grade 6" style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                  </div>
-                  <div className="form-group">
-                    <label>Description</label>
-                    <textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} rows={3} style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                  </div>
-                  <div className="form-group">
-                    <label>Order</label>
-                    <input type="number" value={formData.order} onChange={(e) => setFormData({...formData, order: parseInt(e.target.value)})} style={{ width: '100px', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                  </div>
-                </>
-              )}
-
-              {/* Subject Form */}
-              {modalType === 'subject' && (
-                <>
-                  <div className="form-group">
-                    <label>Subject Name</label>
-                    <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value.toLowerCase().replace(/\s+/g, '_')})} required placeholder="e.g., mathematics" style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                  </div>
-                  <div className="form-group">
-                    <label>Display Name</label>
-                    <input type="text" value={formData.displayName} onChange={(e) => setFormData({...formData, displayName: e.target.value})} required placeholder="e.g., Mathematics" style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                  </div>
-                  <div className="form-group">
-                    <label>Description</label>
-                    <textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} rows={2} style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                  </div>
-                  <div className="form-group">
-                    <label>Color Theme</label>
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                      {['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#06B6D4', '#84CC16'].map(color => (
-                        <div 
-                          key={color}
-                          onClick={() => setFormData({...formData, color})}
-                          style={{ 
-                            width: '40px', height: '40px', borderRadius: '8px', background: color, cursor: 'pointer',
-                            border: formData.color === color ? '3px solid #1F2937' : '3px solid transparent'
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label>Grade</label>
-                    <select value={formData.gradeId} onChange={(e) => setFormData({...formData, gradeId: e.target.value})} required style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }}>
-                      <option value="">Select Grade</option>
-                      {content.map((g) => (
-                        <option key={g.grade._id} value={g.grade._id}>{g.grade.displayName}</option>
-                      ))}
-                    </select>
-                  </div>
-                </>
-              )}
-
-              {/* Lesson Form */}
-              {modalType === 'lesson' && (
-                <>
-                  <div className="form-group">
-                    <label>Lesson Title</label>
-                    <input type="text" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} required placeholder="e.g., Introduction to Algebra" style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                  </div>
-                  <div className="form-group">
-                    <label>Description</label>
-                    <textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} rows={2} style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                  </div>
-                  <div className="form-group">
-                    <label>Subject</label>
-                    <select value={formData.subjectId} onChange={(e) => setFormData({...formData, subjectId: e.target.value})} required style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }}>
-                      <option value="">Select Subject</option>
-                      {content.flatMap(g => g.subjects.map(s => (
-                        <option key={s.subject._id} value={s.subject._id}>{g.grade.displayName} - {s.subject.displayName}</option>
-                      )))}
-                    </select>
-                  </div>
-                  
-                  {/* Video Upload Section */}
-                  <div style={{ background: '#EEF2FF', padding: '20px', borderRadius: '12px', marginBottom: '20px' }}>
-                    <h4 style={{ margin: '0 0 15px 0', display: 'flex', alignItems: 'center', gap: '8px', color: '#4F46E5' }}>
-                      <Icons.Video /> Video Lecture
-                    </h4>
-                    
-                    {/* Show existing YouTube video when editing */}
-                    {editItem?.youtubeUrl && !formData.youtubeUrl && (
-                      <div style={{ marginBottom: '15px', padding: '12px', background: '#D1FAE5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#065F46' }}>
-                          <Icons.Check />
-                          <span>YouTube video already linked</span>
-                        </div>
-                        <button 
-                          type="button" 
-                          onClick={() => {
-                            setFormData({...formData, existingYoutubeUrl: '', youtubeUrl: ''});
-                          }}
-                          style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    )}
-                    
-                    {/* YouTube URL Option */}
-                    <div style={{ marginBottom: '15px' }}>
-                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#374151' }}>YouTube Video URL</label>
-                      <input 
-                        type="url" 
-                        value={formData.youtubeUrl || ''} 
-                        onChange={(e) => {
-                          setFormData({...formData, youtubeUrl: e.target.value, existingYoutubeUrl: ''});
-                        }} 
-                        placeholder="https://www.youtube.com/watch?v=..." 
-                        style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px', background: 'white' }} 
-                      />
-                      <small style={{ color: '#6B7280', display: 'block', marginTop: '5px' }}>Paste a YouTube URL (works with youtube.com/watch, youtu.be, youtube.com/shorts)</small>
-                    </div>
-                    
-                    <div style={{ textAlign: 'center', color: '#6B7280', margin: '10px 0', fontWeight: '500' }}>— OR —</div>
-                    
-                    {/* Show existing video when editing */}
-                    {editItem?.videoUrl && !videoFile && !formData.youtubeUrl && (
-                      <div style={{ marginBottom: '15px', padding: '12px', background: '#D1FAE5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#065F46' }}>
-                          <Icons.Check />
-                          <span>Video already uploaded</span>
-                        </div>
-                        <button 
-                          type="button" 
-                          onClick={() => {
-                            setFormData({...formData, existingVideoUrl: '', videoUrl: ''});
-                          }}
-                          style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}
-                        >
-                          Remove Video
-                        </button>
-                      </div>
-                    )}
-                    
-                    {/* File Upload Option */}
-                    <div style={{ marginBottom: '15px' }}>
-                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#374151' }}>Upload Video File</label>
-                      <input 
-                        type="file" 
-                        accept="video/*"
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            setVideoFile(file);
-                            setFormData({...formData, videoUrl: '', existingVideoUrl: ''});
-                          }
-                        }}
-                        style={{ width: '100%', padding: '10px', border: '2px solid #E5E7EB', borderRadius: '8px', background: 'white' }}
-                      />
-                      {videoFile && (
-                        <div style={{ marginTop: '10px', padding: '10px', background: '#D1FAE5', borderRadius: '6px', color: '#065F46' }}>
-                          <strong>Selected:</strong> {videoFile.name}
-                        </div>
-                      )}
-                      <small style={{ color: '#6B7280', display: 'block', marginTop: '5px' }}>Upload video directly from your computer (MP4, WebM - max 500MB)</small>
-                    </div>
-                    
-                    <div style={{ textAlign: 'center', color: '#6B7280', margin: '10px 0', fontWeight: '500' }}>— OR —</div>
-                    
-                    {/* URL Input Option */}
-                    <div className="form-group">
-                      <label>Video URL</label>
-                      <input 
-                        type="url" 
-                        value={formData.videoUrl || ''} 
-                        onChange={(e) => {
-                          setFormData({...formData, videoUrl: e.target.value, existingVideoUrl: ''});
-                          setVideoFile(null);
-                        }} 
-                        placeholder="https://example.com/video.mp4" 
-                        disabled={!!videoFile || !!formData.youtubeUrl}
-                        style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px', background: (videoFile || formData.youtubeUrl) ? '#F9FAFB' : 'white' }} 
-                      />
-                      <small style={{ color: '#6B7280' }}>Paste a direct video URL (not YouTube)</small>
-                    </div>
-                  </div>
-
-                  {/* Notes Section */}
-                  <div style={{ background: '#FEF3C7', padding: '20px', borderRadius: '12px', marginBottom: '20px' }}>
-                    <h4 style={{ margin: '0 0 15px 0', display: 'flex', alignItems: 'center', gap: '8px', color: '#D97706' }}>
-                      <Icons.Notes /> Lesson Notes
-                    </h4>
-                    <div className="form-group">
-                      <label style={{ fontWeight: '600', marginBottom: '8px', display: 'block' }}>Lesson Notes</label>
-                      <textarea 
-                        value={formData.notes} 
-                        onChange={(e) => setFormData({...formData, notes: e.target.value})} 
-                        rows={8} 
-                        placeholder="Enter the lesson notes here. Use new lines for separate paragraphs..." 
-                        style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} 
-                      />
-                      <p style={{ fontSize: '0.8rem', color: '#6B7280', marginTop: '5px' }}>
-                        💡 Tip: Press Enter for new lines. The formatting will appear exactly as you type it.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Quiz Section */}
-                  <div style={{ background: '#ECFDF5', padding: '20px', borderRadius: '12px', marginBottom: '20px' }}>
-                    <h4 style={{ margin: '0 0 15px 0', display: 'flex', alignItems: 'center', gap: '8px', color: '#059669' }}>
-                      <Icons.Quiz /> Quiz Questions
-                    </h4>
-                    
-                    <button type="button" className="btn btn-outline" onClick={addQuizQuestion} style={{ marginBottom: '15px', borderColor: '#059669', color: '#059669' }}>
-                      <Icons.Add /> Add Question
-                    </button>
-                    
-                    {formData.quiz?.map((q, qIndex) => (
-                      <div key={qIndex} style={{ background: 'white', padding: '15px', borderRadius: '10px', marginBottom: '15px', border: '1px solid #E5E7EB' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
-                          <h5 style={{ margin: 0, color: '#1F2937' }}>Question {qIndex + 1}</h5>
-                          <button type="button" onClick={() => removeQuizQuestion(qIndex)} style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}>Remove</button>
-                        </div>
-                        
-                        <div className="form-group">
-                          <label>Question Text</label>
-                          <input type="text" value={q.question} onChange={(e) => updateQuizQuestion(qIndex, 'question', e.target.value)} placeholder="Enter your question" required style={{ width: '100%', padding: '10px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                        </div>
-                        
-                        <div className="form-group">
-                          <label>Question Type</label>
-                          <select value={q.type} onChange={(e) => updateQuizQuestion(qIndex, 'type', e.target.value)} style={{ width: '100%', padding: '10px', border: '2px solid #E5E7EB', borderRadius: '8px' }}>
-                            <option value="multiple_choice">Multiple Choice</option>
-                            <option value="true_false">True / False</option>
-                          </select>
-                        </div>
-                        
-                        {q.type === 'multiple_choice' && (
-                          <div className="form-group">
-                            <label style={{ color: '#1F2937', fontWeight: '500' }}>Options (select radio for correct answer)</label>
-                            {q.options.map((opt, oIndex) => (
-                              <div key={oIndex} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                                <input 
-                                  type="radio" 
-                                  name={`correct-${qIndex}`} 
-                                  checked={q.correctAnswer === opt} 
-                                  onChange={() => updateQuizQuestion(qIndex, 'correctAnswer', opt)}
-                                  style={{ accentColor: '#10B981', width: '18px', height: '18px' }}
-                                />
-                                <input 
-                                  type="text" 
-                                  value={opt} 
-                                  onChange={(e) => updateQuizOption(qIndex, oIndex, e.target.value)} 
-                                  placeholder={`Option ${oIndex + 1}`} 
-                                  required 
-                                  style={{ flex: 1, padding: '10px', border: '2px solid #E5E7EB', borderRadius: '8px', background: 'white', color: '#1F2937' }}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        
-                        {q.type === 'true_false' && (
-                          <div className="form-group">
-                            <label>Correct Answer</label>
-                            <select value={q.correctAnswer} onChange={(e) => updateQuizQuestion(qIndex, 'correctAnswer', e.target.value)} required style={{ width: '100%', padding: '10px', border: '2px solid #E5E7EB', borderRadius: '8px' }}>
-                              <option value="">Select Answer</option>
-                              <option value="True">True</option>
-                              <option value="False">False</option>
-                            </select>
-                          </div>
-                        )}
-                        
-                        <div className="form-group">
-                          <label>Points for this Question</label>
-                          <input type="number" value={q.points} onChange={(e) => updateQuizQuestion(qIndex, 'points', parseInt(e.target.value))} min="1" style={{ width: '100px', padding: '10px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                        </div>
-                      </div>
-                    ))}
-                    
-                    {(!formData.quiz || formData.quiz.length === 0) && (
-                      <p style={{ color: '#6B7280', textAlign: 'center' }}>No quiz questions yet. Click "Add Question" to create one.</p>
-                    )}
-                  </div>
-                  
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                    <div className="form-group">
-                      <label>Points for Completing Lesson</label>
-                      <input type="number" value={formData.pointsReward} onChange={(e) => setFormData({...formData, pointsReward: parseInt(e.target.value)})} style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                    </div>
-                    <div className="form-group">
-                      <label>Points for Quiz</label>
-                      <input type="number" value={formData.quizPointsReward} onChange={(e) => setFormData({...formData, quizPointsReward: parseInt(e.target.value)})} style={{ width: '100%', padding: '12px', border: '2px solid #E5E7EB', borderRadius: '8px' }} />
-                    </div>
-                  </div>
-                </>
-              )}
-
-              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '25px', paddingTop: '20px', borderTop: '1px solid #E5E7EB' }}>
-                <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)} style={{ padding: '12px 24px' }}>Cancel</button>
-                <button type="submit" className="btn btn-primary" disabled={uploading} style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  {uploading ? <><Icons.Save /> Saving...</> : <><Icons.Save /> Save {modalType}</>}
-                </button>
-              </div>
-            </form>
           </div>
-        </div>
-      )}
+        </section>
+      </main>
     </div>
   );
 };
