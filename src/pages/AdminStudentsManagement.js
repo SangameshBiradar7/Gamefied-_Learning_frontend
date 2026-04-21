@@ -6,7 +6,7 @@ import {
   BookOpen, Calendar, Filter, ChevronDown
 } from 'lucide-react';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const AdminStudentsManagement = () => {
   const { user, token } = useAuth();

@@ -7,7 +7,7 @@ import {
   Target, Medal, CheckCircle
 } from 'lucide-react';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const StudentDashboard = () => {
   const { user, token, logout, updateUser } = useAuth();
