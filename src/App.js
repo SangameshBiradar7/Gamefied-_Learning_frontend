@@ -12,6 +12,15 @@ import Quiz from './pages/Quiz';
 import Leaderboard from './pages/Leaderboard';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminAnalytics from './pages/AdminAnalytics';
+import AdminGradesManagement from './pages/AdminGradesManagement';
+import AdminLessonsManagement from './pages/AdminLessonsManagement';
+import AdminStudentsManagement from './pages/AdminStudentsManagement';
+import AdminQuizzesManagement from './pages/AdminQuizzesManagement';
+import AdminLeaderboardManagement from './pages/AdminLeaderboardManagement';
+import AdminReportsManagement from './pages/AdminReportsManagement';
+import AdminUsersManagement from './pages/AdminUsersManagement';
+import AdminSettings from './pages/AdminSettings';
+import AdminWeeklyTestsManagement from './pages/AdminWeeklyTestsManagement';
 import './styles/App.css';
 
 const PrivateRoute = ({ children, adminOnly = false }) => {
@@ -107,6 +116,51 @@ function App() {
           <Route path="/admin/analytics" element={
             <PrivateRoute adminOnly={true}>
               <AdminAnalytics />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/grades" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminGradesManagement />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/lessons" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminLessonsManagement />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/students" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminStudentsManagement />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/quizzes" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminQuizzesManagement />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/leaderboard" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminLeaderboardManagement />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/reports" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminReportsManagement />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/users" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminUsersManagement />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/settings" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminSettings />
+            </PrivateRoute>
+          } />
+          <Route path="/admin/weekly-tests" element={
+            <PrivateRoute adminOnly={true}>
+              <AdminWeeklyTestsManagement />
             </PrivateRoute>
           } />
           <Route path="/" element={<Navigate to="/login" />} />

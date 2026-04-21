@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { 
-  BarChart, Bar, PieChart, Pie, LineChart, Line, AreaChart, Area, 
+import {
+  BarChart, Bar, PieChart, Pie, LineChart, Line, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell
 } from 'recharts';
+import {
+  LayoutDashboard, BarChart3, Users, BookOpen, Trophy, Target,
+  FileText, Settings, GraduationCap, ChevronRight, Menu, X, Shield
+} from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -13,9 +17,11 @@ const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'
 const AdminDashboard = () => {
   const { user, token, logout, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [overview, setOverview] = useState(null);
   const [levelDistribution, setLevelDistribution] = useState([]);
@@ -28,6 +34,29 @@ const AdminDashboard = () => {
   const [attentionNeeded, setAttentionNeeded] = useState(null);
   const [villageAnalytics, setVillageAnalytics] = useState([]);
   const [schoolAnalytics, setSchoolAnalytics] = useState([]);
+
+  // Sidebar navigation items
+  const adminNavItems = [
+    { path: '/admin', icon: <LayoutDashboard size={16} />, label: 'Dashboard', exact: true },
+    { path: '/admin/analytics', icon: <BarChart3 size={16} />, label: 'Analytics' },
+    { path: '/admin/grades', icon: <GraduationCap size={16} />, label: 'Grades' },
+    { path: '/admin/lessons', icon: <BookOpen size={16} />, label: 'Lessons' },
+    { path: '/admin/students', icon: <Users size={16} />, label: 'Students' },
+    { path: '/admin/weekly-tests', icon: <Target size={16} />, label: 'Weekly Tests' },
+    { path: '/admin/quizzes', icon: <Trophy size={16} />, label: 'Quizzes' },
+    { path: '/admin/leaderboard', icon: <BarChart3 size={16} />, label: 'Leaderboard' },
+    { path: '/admin/reports', icon: <FileText size={16} />, label: 'Reports' },
+    { path: '/admin/users', icon: <Shield size={16} />, label: 'Admin Users' },
+    { path: '/admin/settings', icon: <Settings size={16} />, label: 'Settings' }
+  ];
+
+  // Check if a route is active
+  const isActivePath = (path, exact) => {
+    if (exact) {
+      return location.pathname === path;
+    }
+    return location.pathname.startsWith(path);
+  };
 
   const fetchWithAuth = useCallback(async (endpoint, options = {}) => {
     const response = await fetch(`${API_URL}${endpoint}`, {
@@ -260,45 +289,296 @@ const AdminDashboard = () => {
     );
   }
 
-  const totalStudents = overview?.totalStudents || 265;
-  const levelTotal = levelDistribution.reduce((sum, l) => sum + l.count, 0);
-
   return (
-    <div style={{ background: '#F3F4F6', minHeight: '100vh' }}>
-      <header style={{ background: '#1F2937', padding: '15px 0', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <div style={{ width: '45px', height: '45px', background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.5rem' }}>
-              📊
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#F3F4F6' }}>
+      {/* Mobile Overlay */}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'rgba(0,0,0,0.5)',
+          zIndex: 99,
+          display: sidebarOpen ? 'block' : 'none'
+        }}
+      />
+
+      {/* Sidebar */}
+      <aside style={{
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        width: '270px',
+        height: '100vh',
+        background: '#1F2937',
+        borderRight: '1px solid #374151',
+        zIndex: 100,
+        transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+        transition: 'transform 0.3s ease',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        {/* Sidebar Header */}
+        <div style={{ padding: '20px', borderBottom: '1px solid #374151' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+              <BarChart3 size={22} />
             </div>
             <div>
-              <h1 style={{ color: 'white', fontSize: '1.5rem', margin: 0, fontWeight: '800' }}>LearnQuest Admin</h1>
-              <p style={{ color: '#9CA3AF', margin: 0, fontSize: '0.875rem' }}>Analytics Dashboard</p>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <Link to="/dashboard" style={{ color: '#D1D5DB', textDecoration: 'none', padding: '10px 20px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', fontWeight: '600' }}>
-              Student View
-            </Link>
-            <button onClick={logout} style={{ background: 'linear-gradient(135deg, #EF4444, #DC2626)', color: 'white', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>
-              Logout
-            </button>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '700', fontSize: '1.1rem' }}>
-              {user?.username?.charAt(0).toUpperCase()}
+              <h2 style={{ margin: 0, color: 'white', fontSize: '1.1rem', fontWeight: '800' }}>LearnQuest</h2>
+              <p style={{ margin: 0, color: '#9CA3AF', fontSize: '0.75rem' }}>Admin Panel</p>
             </div>
           </div>
         </div>
-      </header>
 
-      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '30px 20px' }}>
-        <div style={{ marginBottom: '30px' }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937', marginBottom: '8px' }}>
-            Analytics Overview
-          </h1>
-          <p style={{ color: '#6B7280', fontSize: '1.1rem' }}>
-            Complete student performance monitoring and insights
-          </p>
+        {/* Sidebar Navigation */}
+        <nav style={{ flex: 1, padding: '15px 10px', overflowY: 'auto' }}>
+          {adminNavItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setSidebarOpen(false)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '12px 14px',
+                marginBottom: '4px',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                color: isActivePath(item.path, item.exact) ? 'white' : '#9CA3AF',
+                background: isActivePath(item.path, item.exact) ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+                border: isActivePath(item.path, item.exact) ? '2px solid #6366F1' : '2px solid transparent',
+                fontWeight: isActivePath(item.path, item.exact) ? '700' : '500',
+                fontSize: '0.875rem',
+                transition: 'all 0.2s'
+              }}
+            >
+              {item.icon}
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Sidebar Footer */}
+        <div style={{ padding: '15px', borderTop: '1px solid #374151' }}>
+          <button
+            onClick={logout}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', background: 'transparent', color: '#EF4444', border: '1px solid #EF4444', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.875rem' }}
+          >
+            <ChevronRight size={16} /> Logout
+          </button>
         </div>
+      </aside>
+
+      {/* Main Content Wrapper */}
+      <div style={{ flex: 1, marginLeft: '270px', display: 'flex', flexDirection: 'column' }}>
+        {/* Mobile Header */}
+        <div style={{
+          display: 'none',
+          background: '#1F2937',
+          padding: '15px 20px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
+          borderBottom: '2px solid #374151',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }} className="admin-mobile-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button
+              onClick={() => setSidebarOpen(true)}
+              style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+            >
+              <Menu size={24} />
+            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                <BarChart3 size={16} />
+              </div>
+              <span style={{ color: 'white', fontWeight: '800', fontSize: '1.1rem' }}>LearnQuest</span>
+            </div>
+          </div>
+          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '700' }}>
+            {user?.username?.charAt(0).toUpperCase()}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <main style={{ padding: '30px' }}>
+          {/* Quick Action Cards - Central Control */}
+          <section style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span>🎯</span> Admin Quick Access
+            </h2>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+              gap: '15px'
+            }}>
+              {[
+                { path: '/admin/grades', label: 'Manage Grades', icon: '🎓', color: '#3B82F6' },
+                { path: '/admin/lessons', label: 'Manage Lessons', icon: '📚', color: '#10B981' },
+                { path: '/admin/students', label: 'Manage Students', icon: '👥', color: '#F59E0B' },
+                { path: '/admin/weekly-tests', label: 'Create Weekly Test', icon: '📝', color: '#EF4444' },
+                { path: '/admin/quizzes', label: 'Quiz Management', icon: '🎯', color: '#8B5CF6' },
+                { path: '/admin/leaderboard', label: 'Leaderboard Mgmt', icon: '🏆', color: '#EC4899' },
+                { path: '/admin/reports', label: 'View Reports', icon: '📊', color: '#6366F1' },
+                { path: '/admin/users', label: 'Admin Users', icon: '🔐', color: '#14B8A6' },
+                { path: '/admin/settings', label: 'Settings', icon: '⚙️', color: '#64748B' }
+              ].map((item) => (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    gap: '8px',
+                    background: 'white',
+                    padding: '18px',
+                    borderRadius: '12px',
+                    textDecoration: 'none',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                    transition: 'all 0.3s',
+                    borderLeft: `4px solid ${item.color}`
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '1.5rem' }}>{item.icon}</span>
+                    <span style={{ fontWeight: '700', color: '#1F2937', fontSize: '0.95rem' }}>{item.label}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <div style={{ marginBottom: '30px' }}>
+            <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937', marginBottom: '8px' }}>
+              Analytics Overview
+            </h1>
+            <p style={{ color: '#6B7280', fontSize: '1.1rem' }}>
+              Complete student performance monitoring and insights
+            </p>
+          </div>
+            <div>
+              <h2 style={{ margin: 0, color: 'white', fontSize: '1.1rem', fontWeight: '800' }}>LearnQuest</h2>
+              <p style={{ margin: 0, color: '#9CA3AF', fontSize: '0.75rem' }}>Admin Panel</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            style={{ display: 'none', position: 'absolute', right: '15px', top: '20px', background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer' }}
+            className="sidebar-close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Sidebar Navigation */}
+        <nav style={{ padding: '15px 10px' }}>
+          {adminNavItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setSidebarOpen(false)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '12px 14px',
+                marginBottom: '4px',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                color: isActivePath(item.path, item.exact) ? 'white' : '#9CA3AF',
+                background: isActivePath(item.path, item.exact) ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+                border: isActivePath(item.path, item.exact) ? '2px solid #6366F1' : '2px solid transparent',
+                fontWeight: isActivePath(item.path, item.exact) ? '700' : '500',
+                fontSize: '0.9rem',
+                transition: 'all 0.2s'
+              }}
+            >
+              {item.icon}
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Sidebar Footer */}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '15px', borderTop: '1px solid #374151' }}>
+          <button
+            onClick={logout}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', background: 'transparent', color: '#EF4444', border: '1px solid #EF4444', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
+          >
+            <ChevronRight size={16} /> Logout
+          </button>
+        </div>
+      </aside>
+
+      {/* Mobile Header */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        background: '#1F2937',
+        padding: '15px 20px',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+        borderBottom: '2px solid #374151'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+          >
+            <Menu size={24} />
+          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+              <BarChart3 size={20} />
+            </div>
+            <div>
+              <h1 style={{ color: 'white', fontSize: '1.3rem', margin: 0, fontWeight: '800' }}>LearnQuest</h1>
+              <p style={{ color: '#9CA3AF', margin: 0, fontSize: '0.75rem' }}>Admin Control Center</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Nav */}
+        <div style={{ display: { xs: 'none', md: 'flex' }, gap: '8px', alignItems: 'center' }}>
+          <Link to="/dashboard" style={{ color: '#D1D5DB', textDecoration: 'none', padding: '8px 16px', borderRadius: '8px', fontWeight: '600', fontSize: '0.875rem', background: 'rgba(255,255,255,0.05)' }}>
+            Student View
+          </Link>
+          <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '700', fontSize: '1rem' }}>
+            {user?.username?.charAt(0).toUpperCase()}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div style={{ flex: 1, marginLeft: '270px' }}>
+        <div style={{ padding: '30px' }}>
+          <div style={{ marginBottom: '30px' }}>
+            <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937', marginBottom: '8px' }}>
+              Analytics Overview
+            </h1>
+            <p style={{ color: '#6B7280', fontSize: '1.1rem' }}>
+              Complete student performance monitoring and insights
+            </p>
+          </div>
 
         {error && (
           <div style={{ background: '#FEF2F2', border: '1px solid #EF4444', borderRadius: '8px', padding: '12px', marginBottom: '20px', color: '#DC2626' }}>
@@ -515,7 +795,9 @@ const AdminDashboard = () => {
           </button>
           Last updated: {new Date().toLocaleString()}
         </div>
-      </main>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

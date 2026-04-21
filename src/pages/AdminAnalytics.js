@@ -7,7 +7,8 @@ import {
 } from 'recharts';
 import {
   Home, Users, Trophy, TrendingUp, AlertTriangle, BookOpen, Star,
-  Flame, Activity, Target, Award, TrendingDown, Calendar, Clock
+  Flame, Activity, Target, Award, TrendingDown, Calendar, Clock,
+  GraduationCap, PlayCircle, UserPlus, FileText, Settings, BarChart3
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -165,7 +166,76 @@ const AdminAnalytics = () => {
 // ============ OVERVIEW TAB ============
 const OverviewTab = ({ data }) => (
   <div>
-    <div className="page-title"><h1>📊 Admin Overview</h1></div>
+    <div className="page-title">
+      <h1>📊 Admin Overview</h1>
+      <p style={{ fontSize: '1rem', marginTop: '8px' }}>
+        Central control panel for platform management
+      </p>
+    </div>
+
+    {/* Quick Access Cards */}
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+      gap: '15px',
+      marginBottom: '35px',
+      marginTop: '25px'
+    }}>
+      {[
+        { path: '/admin/grades', label: 'Manage Grades', icon: <GraduationCap size={20} />, color: '#3B82F6' },
+        { path: '/admin/lessons', label: 'Manage Lessons', icon: <BookOpen size={20} />, color: '#10B981' },
+        { path: '/admin/students', label: 'Manage Students', icon: <Users size={20} />, color: '#F59E0B' },
+        { path: '/admin/weekly-tests', label: 'Create Weekly Test', icon: <Target size={20} />, color: '#EF4444' },
+        { path: '/admin/quizzes', label: 'Quiz Management', icon: <Trophy size={20} />, color: '#8B5CF6' },
+        { path: '/admin/leaderboard', label: 'Manage Leaderboard', icon: <BarChart3 size={20} />, color: '#EC4899' },
+        { path: '/admin/reports', label: 'View Reports', icon: <FileText size={20} />, color: '#6366F1' },
+        { path: '/admin/users', label: 'Admin Users', icon: <UserPlus size={20} />, color: '#14B8A6' },
+        { path: '/admin/settings', label: 'Settings', icon: <Settings size={20} />, color: '#64748B' }
+      ].map((item) => (
+        <a
+          key={item.path}
+          href={item.path}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            background: 'white',
+            padding: '18px',
+            borderRadius: '12px',
+            textDecoration: 'none',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            transition: 'all 0.3s',
+            borderTop: `3px solid ${item.color}`
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-3px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
+          }}
+        >
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
+            background: `${item.color}20`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: item.color,
+            flexShrink: 0
+          }}>
+            {item.icon}
+          </div>
+          <span style={{ fontWeight: '600', color: '#1F2937', fontSize: '0.9rem' }}>
+            {item.label}
+          </span>
+        </a>
+      ))}
+    </div>
+
     <div className="admin-stats">
       <div className="admin-stat-card">
         <h3>👥 Total Students</h3>
