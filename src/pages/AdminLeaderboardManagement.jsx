@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext.jsx';
 import {
   Trophy, Medal, TrendingUp, Filter, ChevronDown, User,
   Award, BarChart3, Target, Flame, Star, Eye
