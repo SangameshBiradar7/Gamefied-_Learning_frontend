@@ -11,11 +11,11 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
 
 const AdminDashboard = () => {
-  const { user, token, logout } = useAuth();
+  const { user, token, logout, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const [overview, setOverview] = useState(null);
   const [levelDistribution, setLevelDistribution] = useState([]);
@@ -38,19 +38,36 @@ const AdminDashboard = () => {
         ...options.headers
       }
     });
-    if (!response.ok) throw new Error('Failed to fetch');
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API Error:', response.status, errorText);
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
     return response.json();
-  }, [token]);
+  }, [token, API_URL]);
 
   useEffect(() => {
-    if (!user || user.role !== 'admin') {
+    if (authLoading) return;
+    if (!user) {
       navigate('/login');
       return;
     }
-    loadDashboardData();
-  }, [user, navigate]);
+    if (user.role !== 'admin') {
+      navigate('/dashboard');
+      return;
+    }
+    if (!dataLoaded) {
+      loadDashboardData();
+    }
+  }, [user, navigate, authLoading, dataLoaded]);
 
   const loadDashboardData = async () => {
+    if (!token) {
+      setError('Authentication required. Please login again.');
+      setLoading(false);
+      return;
+    }
+    
     setLoading(true);
     setError(null);
     try {
@@ -67,6 +84,7 @@ const AdminDashboard = () => {
         fetchWithAuth('/analytics/school-analytics')
       ]);
 
+      setDataLoaded(true);
       setOverview(overviewData);
       setLevelDistribution(levels.distribution);
       setLevelTrend(levels.trend || generateTrendData());
@@ -80,7 +98,7 @@ const AdminDashboard = () => {
       setSchoolAnalytics(schools);
     } catch (err) {
       console.error('Error loading dashboard:', err);
-      setError('Failed to load data. Using cached data.');
+      setError(`Failed to load data: ${err.message}`);
       setLevelDistribution(generateDummyDistribution());
       setTopStudents(generateDummyTopStudents());
       setGradePerformance(generateDummyGrades());
