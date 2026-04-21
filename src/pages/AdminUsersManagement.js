@@ -6,7 +6,7 @@ import {
   UserCheck, Search, Mail
 } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://gamefied-earning-backend.onrender.com/api';
 
 const AdminUsersManagement = () => {
   const { user, token } = useAuth();
