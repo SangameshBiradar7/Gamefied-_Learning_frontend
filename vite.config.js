@@ -15,9 +15,18 @@ export default defineConfig({
   build: {
     outDir: 'build',
     emptyOutDir: true,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {
         main: './index.html'
+      },
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['react-router-dom'],
+          'vendor-icons': ['lucide-react'],
+          'vendor-charts': ['recharts']
+        }
       }
     }
   },
