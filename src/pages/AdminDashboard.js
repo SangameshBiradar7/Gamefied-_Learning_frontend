@@ -35,7 +35,6 @@ const AdminDashboard = () => {
   const [villageAnalytics, setVillageAnalytics] = useState([]);
   const [schoolAnalytics, setSchoolAnalytics] = useState([]);
 
-  // Sidebar navigation items
   const adminNavItems = [
     { path: '/admin', icon: <LayoutDashboard size={16} />, label: 'Dashboard', exact: true },
     { path: '/admin/analytics', icon: <BarChart3 size={16} />, label: 'Analytics' },
@@ -50,7 +49,6 @@ const AdminDashboard = () => {
     { path: '/admin/settings', icon: <Settings size={16} />, label: 'Settings' }
   ];
 
-  // Check if a route is active
   const isActivePath = (path, exact) => {
     if (exact) {
       return location.pathname === path;
@@ -193,6 +191,8 @@ const AdminDashboard = () => {
     }));
   }
 
+  const totalStudents = levelDistribution.reduce((sum, level) => sum + level.count, 0);
+
   const StatsCard = ({ icon, title, value, subtitle, color }) => (
     <div style={{
       background: 'white',
@@ -324,7 +324,7 @@ const AdminDashboard = () => {
       }}>
         {/* Sidebar Header */}
         <div style={{ padding: '20px', borderBottom: '1px solid #374151' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
               <BarChart3 size={22} />
             </div>
@@ -431,9 +431,9 @@ const AdminDashboard = () => {
                 { path: '/admin/users', label: 'Admin Users', icon: '🔐', color: '#14B8A6' },
                 { path: '/admin/settings', label: 'Settings', icon: '⚙️', color: '#64748B' }
               ].map((item) => (
-                <a
+                <Link
                   key={item.path}
-                  href={item.path}
+                  to={item.path}
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -460,117 +460,12 @@ const AdminDashboard = () => {
                     <span style={{ fontSize: '1.5rem' }}>{item.icon}</span>
                     <span style={{ fontWeight: '700', color: '#1F2937', fontSize: '0.95rem' }}>{item.label}</span>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           </section>
 
-          <div style={{ marginBottom: '30px' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937', marginBottom: '8px' }}>
-              Analytics Overview
-            </h1>
-            <p style={{ color: '#6B7280', fontSize: '1.1rem' }}>
-              Complete student performance monitoring and insights
-            </p>
-          </div>
-            <div>
-              <h2 style={{ margin: 0, color: 'white', fontSize: '1.1rem', fontWeight: '800' }}>LearnQuest</h2>
-              <p style={{ margin: 0, color: '#9CA3AF', fontSize: '0.75rem' }}>Admin Panel</p>
-            </div>
-          </div>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            style={{ display: 'none', position: 'absolute', right: '15px', top: '20px', background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer' }}
-            className="sidebar-close"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        {/* Sidebar Navigation */}
-        <nav style={{ padding: '15px 10px' }}>
-          {adminNavItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={() => setSidebarOpen(false)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '12px 14px',
-                marginBottom: '4px',
-                borderRadius: '10px',
-                textDecoration: 'none',
-                color: isActivePath(item.path, item.exact) ? 'white' : '#9CA3AF',
-                background: isActivePath(item.path, item.exact) ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
-                border: isActivePath(item.path, item.exact) ? '2px solid #6366F1' : '2px solid transparent',
-                fontWeight: isActivePath(item.path, item.exact) ? '700' : '500',
-                fontSize: '0.9rem',
-                transition: 'all 0.2s'
-              }}
-            >
-              {item.icon}
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Sidebar Footer */}
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '15px', borderTop: '1px solid #374151' }}>
-          <button
-            onClick={logout}
-            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', background: 'transparent', color: '#EF4444', border: '1px solid #EF4444', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
-          >
-            <ChevronRight size={16} /> Logout
-          </button>
-        </div>
-      </aside>
-
-      {/* Mobile Header */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        background: '#1F2937',
-        padding: '15px 20px',
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        borderBottom: '2px solid #374151'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <button
-            onClick={() => setSidebarOpen(true)}
-            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
-          >
-            <Menu size={24} />
-          </button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
-              <BarChart3 size={20} />
-            </div>
-            <div>
-              <h1 style={{ color: 'white', fontSize: '1.3rem', margin: 0, fontWeight: '800' }}>LearnQuest</h1>
-              <p style={{ color: '#9CA3AF', margin: 0, fontSize: '0.75rem' }}>Admin Control Center</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop Nav */}
-        <div style={{ display: { xs: 'none', md: 'flex' }, gap: '8px', alignItems: 'center' }}>
-          <Link to="/dashboard" style={{ color: '#D1D5DB', textDecoration: 'none', padding: '8px 16px', borderRadius: '8px', fontWeight: '600', fontSize: '0.875rem', background: 'rgba(255,255,255,0.05)' }}>
-            Student View
-          </Link>
-          <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '700', fontSize: '1rem' }}>
-            {user?.username?.charAt(0).toUpperCase()}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div style={{ flex: 1, marginLeft: '270px' }}>
-        <div style={{ padding: '30px' }}>
+          {/* Analytics Header */}
           <div style={{ marginBottom: '30px' }}>
             <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937', marginBottom: '8px' }}>
               Analytics Overview
@@ -580,223 +475,222 @@ const AdminDashboard = () => {
             </p>
           </div>
 
-        {error && (
-          <div style={{ background: '#FEF2F2', border: '1px solid #EF4444', borderRadius: '8px', padding: '12px', marginBottom: '20px', color: '#DC2626' }}>
-            {error}
-          </div>
-        )}
+          {error && (
+            <div style={{ background: '#FEF2F2', border: '1px solid #EF4444', borderRadius: '8px', padding: '12px', marginBottom: '20px', color: '#DC2626' }}>
+              {error}
+            </div>
+          )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginBottom: '40px' }}>
-          <StatsCard icon="👥" title="Total Students" value={totalStudents} subtitle="All time" color="#3B82F6" />
-          <StatsCard icon="📚" title="Active Today" value={overview?.activeStudents || 88} subtitle="Last 24 hours" color="#10B981" />
-          <StatsCard icon="⭐" title="Avg Points" value={overview?.averagePoints || 450} subtitle="Per student" color="#F59E0B" />
-          <StatsCard icon="🔥" title="Perfect Streaks" value={overview?.perfectStreaks || 23} subtitle="7+ days" color="#EF4444" />
-          <StatsCard icon="📖" title="Lessons Today" value={overview?.lessonsToday || 330} subtitle="Completed" color="#8B5CF6" />
-          <StatsCard icon="➕" title="New Today" value={overview?.newToday || 12} subtitle="Registrations" color="#EC4899" />
-        </div>
-
-        <section style={{ marginBottom: '40px' }}>
-          <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span>📈</span> Student Level Analytics
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '15px', marginBottom: '25px' }}>
-            {levelDistribution.map((level, idx) => (
-              <div key={level.level} style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', textAlign: 'center', borderTop: `4px solid ${COLORS[idx]}` }}>
-                <div style={{ fontSize: '1.25rem', fontWeight: '700', color: COLORS[idx], marginBottom: '5px' }}>{level.level}</div>
-                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937' }}>{level.count}</div>
-                <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>{levelTotal > 0 ? Math.round((level.count/levelTotal)*100) : 0}%</div>
-              </div>
-            ))}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginBottom: '40px' }}>
+            <StatsCard icon="👥" title="Total Students" value={overview?.totalStudents || totalStudents} subtitle="All time" color="#3B82F6" />
+            <StatsCard icon="📚" title="Active Today" value={overview?.activeStudents || 88} subtitle="Last 24 hours" color="#10B981" />
+            <StatsCard icon="⭐" title="Avg Points" value={overview?.averagePoints || 450} subtitle="Per student" color="#F59E0B" />
+            <StatsCard icon="🔥" title="Perfect Streaks" value={overview?.perfectStreaks || 23} subtitle="7+ days" color="#EF4444" />
+            <StatsCard icon="📖" title="Lessons Today" value={overview?.lessonsToday || 330} subtitle="Completed" color="#8B5CF6" />
+            <StatsCard icon="➕" title="New Today" value={overview?.newToday || 12} subtitle="Registrations" color="#EC4899" />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px' }}>
-            <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-              <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Level Distribution</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={levelDistribution}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="level" stroke="#6B7280" fontSize={12} />
-                  <YAxis stroke="#6B7280" fontSize={12} />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#3B82F6" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-              <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Level Breakdown</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie data={levelDistribution} dataKey="count" nameKey="level" cx="50%" cy="50%" outerRadius={80} innerRadius={40} label>
-                    {levelDistribution.map((entry, idx) => (
-                      <Cell key={idx} fill={COLORS[idx]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </section>
 
-        <section style={{ marginBottom: '40px' }}>
-          <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span>🏆</span> Top Performing Students
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-            <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-              <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Highest Points</h3>
-              {topStudents.slice(0, 5).map((student, idx) => (
-                <StudentRow key={student._id} student={student} rank={idx + 1} type="points" />
-              ))}
-            </div>
-            <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-              <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Longest Streaks</h3>
-              {topStreaks.slice(0, 5).map((student, idx) => (
-                <StudentRow key={student._id} student={student} rank={idx + 1} type="streak" />
-              ))}
-            </div>
-            <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-              <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Most Active</h3>
-              {mostActive.slice(0, 5).map((student, idx) => (
-                <StudentRow key={student._id} student={{...student, points: student.completedLessons?.length || 0}} rank={idx + 1} type="points" />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section style={{ marginBottom: '40px' }}>
-          <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span>📊</span> Grade Performance
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-            <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-              <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Students by Grade</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={gradePerformance}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="gradeName" stroke="#6B7280" fontSize={12} />
-                  <YAxis stroke="#6B7280" fontSize={12} />
-                  <Tooltip />
-                  <Bar dataKey="totalStudents" name="Students" fill="#3B82F6" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-              <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Average Points by Grade</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={gradePerformance}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="gradeName" stroke="#6B7280" fontSize={12} />
-                  <YAxis stroke="#6B7280" fontSize={12} />
-                  <Tooltip />
-                  <Bar dataKey="avgPoints" name="Avg Points" fill="#10B981" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginTop: '20px' }}>
-            {gradePerformance.map((grade, idx) => (
-              <div key={grade.gradeName} style={{ background: 'white', padding: '15px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', borderTop: `4px solid ${COLORS[idx % COLORS.length]}` }}>
-                <div style={{ fontWeight: '600', color: '#6B7280', fontSize: '0.875rem' }}>{grade.gradeName}</div>
-                <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1F2937' }}>{grade.totalStudents}</div>
-                <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>Avg: {grade.avgPoints} pts • {grade.avgStreak}d streak</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section style={{ marginBottom: '40px' }}>
-          <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span>📈</span> Daily Activity (Last 14 Days)
-          </h2>
-          <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={dailyActivity}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="date" stroke="#6B7280" fontSize={12} />
-                <YAxis stroke="#6B7280" fontSize={12} />
-                <Tooltip />
-                <Area type="monotone" dataKey="uniqueStudents" name="Active Students" stackId="1" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.6} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </section>
-
-        {attentionNeeded && (
-          <section style={{ marginBottom: '40px' }}>
-            <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px', color: '#DC2626' }}>
-              <span>⚠️</span> Students Need Attention
-            </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-              <div style={{ background: '#FEF2F2', borderRadius: '12px', padding: '20px', border: '2px solid #EF4444' }}>
-                <h3 style={{ color: '#DC2626', marginBottom: '15px' }}>Inactive Students ({attentionNeeded.inactive?.length || 0})</h3>
-                {attentionNeeded.inactive?.slice(0, 5).map((student, idx) => (
-                  <div key={idx} style={{ background: 'white', padding: '10px', borderRadius: '8px', marginBottom: '8px', borderLeft: '4px solid #EF4444' }}>
-                    <div style={{ fontWeight: '600', color: '#1F2937' }}>{student.username}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>{student.grade?.displayName}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ background: '#F3E8FF', borderRadius: '12px', padding: '20px', border: '2px solid #8B5CF6' }}>
-                <h3 style={{ color: '#7C3AED', marginBottom: '15px' }}>Low Performers ({attentionNeeded.lowPerformers?.length || 0})</h3>
-                {attentionNeeded.lowPerformers?.slice(0, 5).map((student, idx) => (
-                  <div key={idx} style={{ background: 'white', padding: '10px', borderRadius: '8px', marginBottom: '8px', borderLeft: '4px solid #8B5CF6' }}>
-                    <div style={{ fontWeight: '600', color: '#1F2937' }}>{student.username}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>Avg Score: {student.avgScore}%</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ background: '#FEF3C7', borderRadius: '12px', padding: '20px', border: '2px solid #F59E0B' }}>
-                <h3 style={{ color: '#D97706', marginBottom: '15px' }}>Lost Streaks ({attentionNeeded.lostStreaks?.length || 0})</h3>
-                {attentionNeeded.lostStreaks?.slice(0, 5).map((student, idx) => (
-                  <div key={idx} style={{ background: 'white', padding: '10px', borderRadius: '8px', marginBottom: '8px', borderLeft: '4px solid #F59E0B' }}>
-                    <div style={{ fontWeight: '600', color: '#1F2937' }}>{student.username}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>Streak: {student.streak?.current || 0} days</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {villageAnalytics.length > 0 && (
           <section style={{ marginBottom: '40px' }}>
             <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span>🏘️</span> Village Performance
+              <span>📈</span> Student Level Analytics
             </h2>
-            <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ borderBottom: '2px solid #E5E7EB' }}>
-                    <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Village</th>
-                    <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Students</th>
-                    <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Avg Points</th>
-                    <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Avg Streak</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {villageAnalytics.slice(0, 10).map((village, idx) => (
-                    <tr key={idx} style={{ borderBottom: '1px solid #E5E7EB' }}>
-                      <td style={{ padding: '12px', fontWeight: '600' }}>{village.village}</td>
-                      <td style={{ padding: '12px' }}>{village.totalStudents}</td>
-                      <td style={{ padding: '12px' }}>{village.avgPoints}</td>
-                      <td style={{ padding: '12px' }}>{village.avgStreak} days</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '15px', marginBottom: '25px' }}>
+              {levelDistribution.map((level, idx) => (
+                <div key={level.level} style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', textAlign: 'center', borderTop: `4px solid ${COLORS[idx]}` }}>
+                  <div style={{ fontSize: '1.25rem', fontWeight: '700', color: COLORS[idx], marginBottom: '5px' }}>{level.level}</div>
+                  <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1F2937' }}>{level.count}</div>
+                  <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>{totalStudents > 0 ? Math.round((level.count/totalStudents)*100) : 0}%</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px' }}>
+              <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Level Distribution</h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={levelDistribution}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                    <XAxis dataKey="level" stroke="#6B7280" fontSize={12} />
+                    <YAxis stroke="#6B7280" fontSize={12} />
+                    <Tooltip />
+                    <Bar dataKey="count" fill="#3B82F6" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Level Breakdown</h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <PieChart>
+                    <Pie data={levelDistribution} dataKey="count" nameKey="level" cx="50%" cy="50%" outerRadius={80} innerRadius={40} label>
+                      {levelDistribution.map((entry, idx) => (
+                        <Cell key={idx} fill={COLORS[idx]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </section>
-        )}
 
-        <div style={{ textAlign: 'center', padding: '20px', color: '#6B7280', fontSize: '0.875rem' }}>
-          <button onClick={loadDashboardData} style={{ background: '#3B82F6', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', marginRight: '10px' }}>
-            Refresh Data
-          </button>
-          Last updated: {new Date().toLocaleString()}
-        </div>
+          <section style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span>🏆</span> Top Performing Students
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+              <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Highest Points</h3>
+                {topStudents.slice(0, 5).map((student, idx) => (
+                  <StudentRow key={student._id} student={student} rank={idx + 1} type="points" />
+                ))}
+              </div>
+              <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Longest Streaks</h3>
+                {topStreaks.slice(0, 5).map((student, idx) => (
+                  <StudentRow key={student._id} student={student} rank={idx + 1} type="streak" />
+                ))}
+              </div>
+              <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Most Active</h3>
+                {mostActive.slice(0, 5).map((student, idx) => (
+                  <StudentRow key={student._id} student={{...student, points: student.completedLessons?.length || 0}} rank={idx + 1} type="points" />
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span>📊</span> Grade Performance
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+              <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Students by Grade</h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={gradePerformance}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                    <XAxis dataKey="gradeName" stroke="#6B7280" fontSize={12} />
+                    <YAxis stroke="#6B7280" fontSize={12} />
+                    <Tooltip />
+                    <Bar dataKey="totalStudents" name="Students" fill="#3B82F6" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <h3 style={{ color: '#1F2937', marginBottom: '15px' }}>Average Points by Grade</h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={gradePerformance}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                    <XAxis dataKey="gradeName" stroke="#6B7280" fontSize={12} />
+                    <YAxis stroke="#6B7280" fontSize={12} />
+                    <Tooltip />
+                    <Bar dataKey="avgPoints" name="Avg Points" fill="#10B981" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginTop: '20px' }}>
+              {gradePerformance.map((grade, idx) => (
+                <div key={grade.gradeName} style={{ background: 'white', padding: '15px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', borderTop: `4px solid ${COLORS[idx % COLORS.length]}` }}>
+                  <div style={{ fontWeight: '600', color: '#6B7280', fontSize: '0.875rem' }}>{grade.gradeName}</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1F2937' }}>{grade.totalStudents}</div>
+                  <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>Avg: {grade.avgPoints} pts • {grade.avgStreak}d streak</div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span>📈</span> Daily Activity (Last 14 Days)
+            </h2>
+            <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={dailyActivity}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                  <XAxis dataKey="date" stroke="#6B7280" fontSize={12} />
+                  <YAxis stroke="#6B7280" fontSize={12} />
+                  <Tooltip />
+                  <Area type="monotone" dataKey="uniqueStudents" name="Active Students" stackId="1" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.6} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </section>
+
+          {attentionNeeded && (
+            <section style={{ marginBottom: '40px' }}>
+              <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px', color: '#DC2626' }}>
+                <span>⚠️</span> Students Need Attention
+              </h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+                <div style={{ background: '#FEF2F2', borderRadius: '12px', padding: '20px', border: '2px solid #EF4444' }}>
+                  <h3 style={{ color: '#DC2626', marginBottom: '15px' }}>Inactive Students ({attentionNeeded.inactive?.length || 0})</h3>
+                  {attentionNeeded.inactive?.slice(0, 5).map((student, idx) => (
+                    <div key={idx} style={{ background: 'white', padding: '10px', borderRadius: '8px', marginBottom: '8px', borderLeft: '4px solid #EF4444' }}>
+                      <div style={{ fontWeight: '600', color: '#1F2937' }}>{student.username}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>{student.grade?.displayName}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ background: '#F3E8FF', borderRadius: '12px', padding: '20px', border: '2px solid #8B5CF6' }}>
+                  <h3 style={{ color: '#7C3AED', marginBottom: '15px' }}>Low Performers ({attentionNeeded.lowPerformers?.length || 0})</h3>
+                  {attentionNeeded.lowPerformers?.slice(0, 5).map((student, idx) => (
+                    <div key={idx} style={{ background: 'white', padding: '10px', borderRadius: '8px', marginBottom: '8px', borderLeft: '4px solid #8B5CF6' }}>
+                      <div style={{ fontWeight: '600', color: '#1F2937' }}>{student.username}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>Avg Score: {student.avgScore}%</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ background: '#FEF3C7', borderRadius: '12px', padding: '20px', border: '2px solid #F59E0B' }}>
+                  <h3 style={{ color: '#D97706', marginBottom: '15px' }}>Lost Streaks ({attentionNeeded.lostStreaks?.length || 0})</h3>
+                  {attentionNeeded.lostStreaks?.slice(0, 5).map((student, idx) => (
+                    <div key={idx} style={{ background: 'white', padding: '10px', borderRadius: '8px', marginBottom: '8px', borderLeft: '4px solid #F59E0B' }}>
+                      <div style={{ fontWeight: '600', color: '#1F2937' }}>{student.username}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>Streak: {student.streak?.current || 0} days</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {villageAnalytics.length > 0 && (
+            <section style={{ marginBottom: '40px' }}>
+              <h2 style={{ color: '#1F2937', margin: '0 0 20px 0', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span>🏘️</span> Village Performance
+              </h2>
+              <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #E5E7EB' }}>
+                      <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Village</th>
+                      <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Students</th>
+                      <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Avg Points</th>
+                      <th style={{ textAlign: 'left', padding: '12px', color: '#6B7280' }}>Avg Streak</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {villageAnalytics.slice(0, 10).map((village, idx) => (
+                      <tr key={idx} style={{ borderBottom: '1px solid #E5E7EB' }}>
+                        <td style={{ padding: '12px', fontWeight: '600' }}>{village.village}</td>
+                        <td style={{ padding: '12px' }}>{village.totalStudents}</td>
+                        <td style={{ padding: '12px' }}>{village.avgPoints}</td>
+                        <td style={{ padding: '12px' }}>{village.avgStreak} days</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
+
+          <div style={{ textAlign: 'center', padding: '20px', color: '#6B7280', fontSize: '0.875rem' }}>
+            <button onClick={loadDashboardData} style={{ background: '#3B82F6', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', marginRight: '10px' }}>
+              Refresh Data
+            </button>
+            Last updated: {new Date().toLocaleString()}
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

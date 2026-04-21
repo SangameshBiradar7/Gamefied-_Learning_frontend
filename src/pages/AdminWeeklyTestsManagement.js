@@ -104,37 +104,8 @@ const AdminWeeklyTestsManagement = () => {
         assignedStudents: selectedStudents
       };
 
-      const url = editingTest 
-        ? `${API_URL}/admin/weekly-tests/${editingTest._id}` 
-        : `${API_URL}/admin/weekly-tests`;
-      const method = editingTest ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save weekly test');
-      }
-
-      setSuccess(editingTest ? 'Weekly test updated successfully' : 'Weekly test created successfully');
-      fetchData();
-      setShowModal(false);
-      resetForm();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-      const url = editingTest 
-        ? `${API_URL}/admin/weekly-tests/${editingTest._id}` 
+      const url = editingTest
+        ? `${API_URL}/admin/weekly-tests/${editingTest._id}`
         : `${API_URL}/admin/weekly-tests`;
       const method = editingTest ? 'PUT' : 'POST';
 
