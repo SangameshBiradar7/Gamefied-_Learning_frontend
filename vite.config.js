@@ -14,6 +14,14 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
-    emptyOutDir: true
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
+    }
+  },
+  optimizeDeps: {
+    exclude: ['react', 'react-dom']
   }
 })
